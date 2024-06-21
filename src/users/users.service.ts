@@ -11,6 +11,10 @@ export class UsersService {
 
   async create(createUserDto: CreateUserDto) {
     return await this.UserModel.create(createUserDto);
+    }
+
+  async findOne(email: string) {
+    return await this.UserModel.findOne({ email });
   }
 
   // For Super Super Admin
@@ -18,9 +22,10 @@ export class UsersService {
     return await this.UserModel.find();
   }
 
-  async findOne(id: string) {
+  async findById(id: string) {
     return await this.UserModel.findById(id);
   }
+
 
   async update(id: string, updateUserDto: UpdateUserDto) {
     return await this.UserModel.findByIdAndUpdate(id, updateUserDto);
