@@ -7,17 +7,22 @@ import bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { Response } from 'express';
 
-
 @Injectable()
 export class AuthService {
   constructor(
-    private readonly usersService: UsersService, 
-    private jwtService: JwtService
+    private readonly usersService: UsersService,
+    private jwtService: JwtService,
   ) {}
 
   async register(createUserDto: CreateUserDto) {
     const { password: userPassword, ...other } = createUserDto;
-    const password = await this.hashPassword(userPassword)
+    const user = await this.usersService.findOne(other.email);
+
+    if (user && user.email) {
+      throw new BadRequestException('Email Already in use');
+    }
+
+    const password = await this.hashPassword(userPassword);
     return await this.usersService.create({ ...other, password });
   }
 
@@ -25,11 +30,10 @@ export class AuthService {
     const user = await this.usersService.findOne(createAuthDto.email);
 
     if (!user) {
-      throw new BadRequestException('User does not exist')
+      throw new BadRequestException('User does not exist');
     }
-    const { password, ...result } = user;
 
-    await this.comparePassword(password, createAuthDto.password)
+    await this.comparePassword(user.password, createAuthDto.password);
 
     const payload = { sub: user._id, role: user.role, email: user.email };
 
@@ -57,7 +61,7 @@ export class AuthService {
       throw new UnauthorizedException("You're not authorized");
     }
   }
- 
+
   async comparePassword(password1: string, password2): Promise<string> {
     try {
       return await bcrypt.compare(password1, password2);

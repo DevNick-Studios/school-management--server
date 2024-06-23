@@ -11,7 +11,7 @@ export class UsersService {
 
   async create(createUserDto: CreateUserDto) {
     return await this.UserModel.create(createUserDto);
-    }
+  }
 
   async findOne(email: string) {
     return await this.UserModel.findOne({ email });
@@ -25,7 +25,6 @@ export class UsersService {
   async findById(id: string) {
     return await this.UserModel.findById(id);
   }
-
 
   async update(id: string, updateUserDto: UpdateUserDto) {
     return await this.UserModel.findByIdAndUpdate(id, updateUserDto);
