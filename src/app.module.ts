@@ -9,6 +9,7 @@ import { ClassModule } from './class/class.module';
 import { TeachersModule } from './teachers/teachers.module';
 import { StudentsModule } from './students/students.module';
 import { SubjectsModule } from './subjects/subjects.module';
+import { SharedModule } from './shared/shared.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { SubjectsModule } from './subjects/subjects.module';
     TeachersModule,
     StudentsModule,
     SubjectsModule,
+    SharedModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -1,26 +1,44 @@
-import { Injectable } from '@nestjs/common';
-import { CreateClassDto } from './dto/create-class.dto';
-import { UpdateClassDto } from './dto/update-class.dto';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { Injectable, UnprocessableEntityException } from '@nestjs/common';
+import { CreateClassDto } from './dto/create-Class.dto';
+import { UpdateClassDto } from './dto/update-Class.dto';
+import { Class } from './schemas/Class.schema';
 
 @Injectable()
 export class ClassService {
-  create(createClassDto: CreateClassDto) {
-    return 'This action adds a new class';
+  constructor(@InjectModel(Class.name) private ClassModel: Model<Class>) {}
+
+  async create(createClassDto: CreateClassDto) {
+    try {
+      return await this.ClassModel.create(createClassDto);
+    } catch (error) {
+      throw new UnprocessableEntityException('Couldnt process your request');
+    }
   }
 
-  findAll() {
-    return `This action returns all class`;
+  async findOne(email: string) {
+    return await this.ClassModel.findOne({ email });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} class`;
+  async findSchoolClasses(schoolId: string) {
+    return await this.ClassModel.find({ schoolId });
   }
 
-  update(id: number, updateClassDto: UpdateClassDto) {
-    return `This action updates a #${id} class`;
+  // For Super Super Admin
+  async findAll() {
+    return await this.ClassModel.find();
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} class`;
+  async findById(id: string) {
+    return await this.ClassModel.findById(id);
+  }
+
+  async update(id: string, updateClassDto: UpdateClassDto) {
+    return await this.ClassModel.findByIdAndUpdate(id, updateClassDto);
+  }
+
+  async remove(id: string) {
+    return await this.ClassModel.findByIdAndDelete(id);
   }
 }
