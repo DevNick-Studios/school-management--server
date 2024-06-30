@@ -1,26 +1,50 @@
-import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { Injectable, UnprocessableEntityException } from '@nestjs/common';
 import { CreateStudentDto } from './dto/create-student.dto';
 import { UpdateStudentDto } from './dto/update-student.dto';
+import { Student } from './schemas/Student.schema';
 
 @Injectable()
 export class StudentsService {
-  create(createStudentDto: CreateStudentDto) {
-    return 'This action adds a new student';
+  constructor(
+    @InjectModel(Student.name) private StudentModel: Model<Student>,
+  ) {}
+
+  async create(createStudentDto: CreateStudentDto) {
+    try {
+      return await this.StudentModel.create(createStudentDto);
+    } catch (error) {
+      throw new UnprocessableEntityException('Couldnt process your request');
+    }
   }
 
-  findAll() {
-    return `This action returns all students`;
+  async findOne(email: string) {
+    return await this.StudentModel.findOne({ email });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} student`;
+  async findSchoolStudents(schoolId: string) {
+    return await this.StudentModel.find({ schoolId });
   }
 
-  update(id: number, updateStudentDto: UpdateStudentDto) {
-    return `This action updates a #${id} student`;
+  async findClassStudents(currentClass: string) {
+    return await this.StudentModel.find({ currentClass });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} student`;
+  // For Super Super Admin
+  async findAll() {
+    return await this.StudentModel.find();
+  }
+
+  async findById(id: string) {
+    return await this.StudentModel.findById(id);
+  }
+
+  async update(id: string, updateStudentDto: UpdateStudentDto) {
+    return await this.StudentModel.findByIdAndUpdate(id, updateStudentDto);
+  }
+
+  async remove(id: string) {
+    return await this.StudentModel.findByIdAndDelete(id);
   }
 }

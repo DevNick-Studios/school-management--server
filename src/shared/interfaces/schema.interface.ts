@@ -1,3 +1,10 @@
+import { Types } from 'mongoose';
+
+export enum GenderEnum {
+  MALE = 'MALE',
+  FEMALE = 'FEMALE',
+}
+
 export interface IUser {
   name: string;
   email: string;
@@ -19,6 +26,24 @@ export interface IClass {
 export interface ITeacher {
   schoolId: string;
   name: string;
+  gender?: GenderEnum;
   email: string;
   password: string;
+}
+
+export interface IStudent {
+  schoolId: string;
+  name: string;
+  age: number;
+  gender: GenderEnum;
+  currentClass: Types.ObjectId;
+  previousClasses?: Types.ObjectId[];
+  email?: string;
+  password?: string;
+}
+
+export interface ISubject {
+  classId: string;
+  teacherId: string;
+  name: string;
 }
