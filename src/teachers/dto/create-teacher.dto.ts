@@ -1,5 +1,5 @@
-import { IsString } from 'class-validator';
-import { ITeacher } from 'src/shared/interfaces/schema.interface';
+import { IsEnum, IsOptional, IsString } from 'class-validator';
+import { GenderEnum, ITeacher } from 'src/shared/interfaces/schema.interface';
 
 export class CreateTeacherDto implements ITeacher {
   @IsString()
@@ -13,4 +13,8 @@ export class CreateTeacherDto implements ITeacher {
 
   @IsString()
   schoolId: string;
+
+  @IsEnum(GenderEnum)
+  @IsOptional()
+  gender: GenderEnum;
 }

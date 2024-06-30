@@ -1,8 +1,8 @@
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Injectable, UnprocessableEntityException } from '@nestjs/common';
-import { CreateTeacherDto } from './dto/create-Teacher.dto';
-import { UpdateTeacherDto } from './dto/update-Teacher.dto';
+import { CreateTeacherDto } from './dto/create-teacher.dto';
+import { UpdateTeacherDto } from './dto/update-teacher.dto';
 import { Teacher } from './schemas/teacher.schema';
 
 @Injectable()

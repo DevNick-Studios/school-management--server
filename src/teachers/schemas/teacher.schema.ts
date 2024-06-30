@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
-import { ITeacher } from 'src/shared/interfaces/schema.interface';
+import { GenderEnum, ITeacher } from 'src/shared/interfaces/schema.interface';
 
 export type TeacherDocument = HydratedDocument<Teacher>;
 
@@ -17,6 +17,9 @@ export class Teacher implements ITeacher {
 
   @Prop({ required: true })
   email: string;
+
+  @Prop({ type: String, enum: GenderEnum })
+  gender?: GenderEnum;
 }
 
 export const TeacherSchema = SchemaFactory.createForClass(Teacher);
