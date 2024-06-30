@@ -1,22 +1,22 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
-import { CreateTeacherDto } from '../dto/create-teacher.dto';
+import { ITeacher } from 'src/shared/interfaces/schema.interface';
 
-export type UserDocument = HydratedDocument<User>;
+export type TeacherDocument = HydratedDocument<Teacher>;
 
 @Schema({ timestamps: true })
-export class User implements CreateTeacherDto {
+export class Teacher implements ITeacher {
   @Prop({ required: true })
   name: string;
 
   @Prop({ required: true })
-  email: string;
-
-  @Prop({ required: true })
   password: string;
 
-  @Prop({ default: 'Manager', enum: ['Manager', 'Owner'] })
-  role?: string;
+  @Prop({ required: true })
+  schoolId: string;
+
+  @Prop({ required: true })
+  email: string;
 }
 
-export const UserSchema = SchemaFactory.createForClass(User);
+export const TeacherSchema = SchemaFactory.createForClass(Teacher);
