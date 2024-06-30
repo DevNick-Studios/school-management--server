@@ -1,11 +1,11 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
-import { CreateUserDto } from '../dto/create-user.dto';
+import { IUser } from 'src/shared/interfaces/schema.interface';
 
 export type UserDocument = HydratedDocument<User>;
 
 @Schema({ timestamps: true })
-export class User implements CreateUserDto {
+export class User implements IUser {
   @Prop({ required: true })
   name: string;
 
