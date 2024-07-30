@@ -14,7 +14,7 @@ export class UsersService {
   }
 
   async findOne(email: string) {
-    return await this.UserModel.findOne({ email });
+    return await this.UserModel.findOne({ email }).lean();
   }
 
   // For Super Super Admin

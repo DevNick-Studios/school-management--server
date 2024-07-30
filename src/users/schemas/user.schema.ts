@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument } from 'mongoose';
-import { IUser } from 'src/shared/interfaces/schema.interface';
+import { HydratedDocument, Types } from 'mongoose';
+import { IUser, AccountTypeEnum } from 'src/shared/interfaces/schema.interface';
 
 export type UserDocument = HydratedDocument<User>;
 
@@ -15,8 +15,12 @@ export class User implements IUser {
   @Prop({ required: true })
   password: string;
 
-  @Prop({ default: 'Manager', enum: ['Manager', 'Owner'] })
-  role?: string;
+  @Prop({ required: true, type: String, enum: AccountTypeEnum })
+  role: AccountTypeEnum;
+
+  @Prop({ type: Types.ObjectId, refPath: 'role' })
+  account: string | Types.ObjectId;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
+UserSchema.index({ email: 1 });

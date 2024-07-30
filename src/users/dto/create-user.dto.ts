@@ -1,5 +1,5 @@
-import { IsEmail, IsOptional, IsString } from 'class-validator';
-import { IUser } from 'src/shared/interfaces/schema.interface';
+import { IsEmail, IsEnum, IsOptional, IsString } from 'class-validator';
+import { AccountTypeEnum, IUser } from 'src/shared/interfaces/schema.interface';
 
 export class CreateUserDto implements IUser {
   @IsString()
@@ -12,5 +12,6 @@ export class CreateUserDto implements IUser {
   password: string;
 
   @IsOptional()
-  role?: string;
+  @IsEnum({ type: AccountTypeEnum })
+  role?: AccountTypeEnum;
 }

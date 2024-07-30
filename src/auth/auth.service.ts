@@ -1,21 +1,23 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { UsersService } from 'src/users/users.service';
-import { CreateAuthDto } from './dto/create-auth.dto';
+import { CreateAuthDto, LoginDto } from './dto/create-auth.dto';
 import { UnauthorizedException } from '@nestjs/common';
-import bcrypt from 'bcrypt';
+import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { Response } from 'express';
+import { SchoolsService } from 'src/schools/schools.service';
+import { AccountTypeEnum } from 'src/shared/interfaces/schema.interface';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly usersService: UsersService,
+    private readonly schoolsService: SchoolsService,
     private jwtService: JwtService,
   ) {}
 
-  async register(createUserDto: CreateUserDto) {
-    const { password: userPassword, ...other } = createUserDto;
+  async register(createAccountDto: CreateAuthDto) {
+    const { password: userPassword, ...other } = createAccountDto;
     const user = await this.usersService.findOne(other.email);
 
     if (user && user.email) {
@@ -23,17 +25,34 @@ export class AuthService {
     }
 
     const password = await this.hashPassword(userPassword);
-    return await this.usersService.create({ ...other, password });
+    const newUser = await this.usersService.create({
+      ...other,
+      password,
+      role: AccountTypeEnum.school,
+    });
+
+    const school = await this.schoolsService.create({
+      ...createAccountDto,
+      name: createAccountDto.schoolName,
+      owner: newUser._id,
+    });
+
+    newUser.account = school._id;
+    await newUser.save();
+
+    return newUser;
   }
 
-  async login(createAuthDto: CreateAuthDto, response: Response) {
-    const user = await this.usersService.findOne(createAuthDto.email);
+  async login(loginDto: LoginDto, response: Response) {
+    const { password, ...user } = await this.usersService.findOne(
+      loginDto.email,
+    );
 
     if (!user) {
       throw new BadRequestException('User does not exist');
     }
 
-    await this.comparePassword(user.password, createAuthDto.password);
+    await this.comparePassword(password, loginDto.password);
 
     const payload = { sub: user._id, role: user.role, email: user.email };
 
@@ -42,15 +61,16 @@ export class AuthService {
 
     const token = this.jwtService.sign(payload);
 
-    return response.cookie('Authentication', token, {
+    response.cookie('Authentication', token, {
       httpOnly: true,
       expires,
       path: '/',
     });
 
-    // return {
-    //   access_token: await this.jwtService.signAsync(payload),
-    // };
+    return {
+      ...user,
+      access_token: token,
+    };
   }
 
   async hashPassword(password: string): Promise<string> {

@@ -1,5 +1,11 @@
 import { Types } from 'mongoose';
 
+export enum AccountTypeEnum {
+  school = 'School',
+  teacher = 'Teacher',
+  manager = 'Manager',
+}
+
 export enum GenderEnum {
   MALE = 'MALE',
   FEMALE = 'FEMALE',
@@ -14,8 +20,9 @@ export interface IUser {
 
 export interface ISchool {
   name: string;
-  inceptionDate: string;
-  location: string;
+  inceptionDate?: string;
+  location?: string;
+  owner?: string | Types.ObjectId;
 }
 
 export interface IClass {

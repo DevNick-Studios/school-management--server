@@ -1,4 +1,5 @@
-import { IsString } from 'class-validator';
+import { IsOptional, IsString } from 'class-validator';
+import { Types } from 'mongoose';
 import { ISchool } from 'src/shared/interfaces/schema.interface';
 
 export class CreateSchoolDto implements ISchool {
@@ -6,8 +7,14 @@ export class CreateSchoolDto implements ISchool {
   name: string;
 
   @IsString()
+  @IsOptional()
   inceptionDate: string;
 
   @IsString()
+  @IsOptional()
   location: string;
+
+  @IsString()
+  @IsOptional()
+  owner: string | Types.ObjectId;
 }
