@@ -1,6 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
 import { GenderEnum, ITeacher } from 'src/shared/interfaces/schema.interface';
+import * as mongoosePaginate from 'mongoose-paginate-v2';
 
 export type TeacherDocument = HydratedDocument<Teacher>;
 
@@ -15,7 +16,7 @@ export class Teacher implements ITeacher {
   @Prop({ required: true })
   schoolId: string;
 
-  @Prop({ required: true })
+  @Prop({ required: true, unique: true })
   email: string;
 
   @Prop({ type: String, enum: GenderEnum })
@@ -23,3 +24,4 @@ export class Teacher implements ITeacher {
 }
 
 export const TeacherSchema = SchemaFactory.createForClass(Teacher);
+TeacherSchema.plugin(mongoosePaginate);
