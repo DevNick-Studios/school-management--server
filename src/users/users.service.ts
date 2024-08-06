@@ -4,6 +4,8 @@ import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './schemas/user.schema';
+import { UnauthorizedException } from '@nestjs/common';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
@@ -32,5 +34,23 @@ export class UsersService {
 
   async remove(id: string) {
     return await this.UserModel.findByIdAndDelete(id);
+  }
+
+  async hashPassword(password: string): Promise<string> {
+    try {
+      return await bcrypt.hash(password, 10);
+    } catch (e) {
+      console.log(e);
+      throw new UnauthorizedException("You're not authorized");
+    }
+  }
+
+  async comparePassword(password1: string, password2): Promise<string> {
+    try {
+      return await bcrypt.compare(password1, password2);
+    } catch (e) {
+      console.log(e);
+      throw new UnauthorizedException("You're not authorized");
+    }
   }
 }

@@ -1,8 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { UsersService } from 'src/users/users.service';
 import { CreateAuthDto, LoginDto } from './dto/create-auth.dto';
-import { UnauthorizedException } from '@nestjs/common';
-import * as bcrypt from 'bcrypt';
+
 import { JwtService } from '@nestjs/jwt';
 import { Response } from 'express';
 import { SchoolsService } from 'src/schools/schools.service';
@@ -24,7 +23,7 @@ export class AuthService {
       throw new BadRequestException('Email Already in use');
     }
 
-    const password = await this.hashPassword(userPassword);
+    const password = await this.usersService.hashPassword(userPassword);
     const newUser = await this.usersService.create({
       ...other,
       password,
@@ -52,7 +51,7 @@ export class AuthService {
       throw new BadRequestException('User does not exist');
     }
 
-    await this.comparePassword(password, loginDto.password);
+    await this.usersService.comparePassword(password, loginDto.password);
 
     const payload = { sub: user._id, role: user.role, email: user.email };
 
@@ -71,23 +70,5 @@ export class AuthService {
       ...user,
       access_token: token,
     };
-  }
-
-  async hashPassword(password: string): Promise<string> {
-    try {
-      return await bcrypt.hash(password, 10);
-    } catch (e) {
-      console.log(e);
-      throw new UnauthorizedException("You're not authorized");
-    }
-  }
-
-  async comparePassword(password1: string, password2): Promise<string> {
-    try {
-      return await bcrypt.compare(password1, password2);
-    } catch (e) {
-      console.log(e);
-      throw new UnauthorizedException("You're not authorized");
-    }
   }
 }
