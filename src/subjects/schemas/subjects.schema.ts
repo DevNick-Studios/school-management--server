@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { ISubject } from 'src/shared/interfaces/schema.interface';
+import * as mongoosePaginate from 'mongoose-paginate-v2';
 
 @Schema({ timestamps: true })
 export class Subject implements ISubject {
@@ -14,3 +15,4 @@ export class Subject implements ISubject {
 }
 
 export const SubjectSchema = SchemaFactory.createForClass(Subject);
+SubjectSchema.plugin(mongoosePaginate);

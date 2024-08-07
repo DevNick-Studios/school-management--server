@@ -1,20 +1,18 @@
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
-import { Injectable, UnprocessableEntityException } from '@nestjs/common';
+import { PaginateModel } from 'mongoose';
+import { Injectable } from '@nestjs/common';
 import { CreateClassDto } from './dto/create-class.dto';
 import { UpdateClassDto } from './dto/update-class.dto';
 import { Class } from './schemas/Class.schema';
 
 @Injectable()
 export class ClassService {
-  constructor(@InjectModel(Class.name) private ClassModel: Model<Class>) {}
+  constructor(
+    @InjectModel(Class.name) private ClassModel: PaginateModel<Class>,
+  ) {}
 
   async create(createClassDto: CreateClassDto) {
-    try {
-      return await this.ClassModel.create(createClassDto);
-    } catch (error) {
-      throw new UnprocessableEntityException('Couldnt process your request');
-    }
+    return await this.ClassModel.create(createClassDto);
   }
 
   async findOne(email: string) {
@@ -26,6 +24,10 @@ export class ClassService {
   }
 
   // For Super Super Admin
+  async findAllPaginate() {
+    return await this.ClassModel.paginate();
+  }
+
   async findAll() {
     return await this.ClassModel.find();
   }

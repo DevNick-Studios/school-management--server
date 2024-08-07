@@ -1,5 +1,5 @@
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { PaginateModel } from 'mongoose';
 import { Injectable, UnprocessableEntityException } from '@nestjs/common';
 import { CreateStudentDto } from './dto/create-student.dto';
 import { UpdateStudentDto } from './dto/update-student.dto';
@@ -8,7 +8,7 @@ import { Student } from './schemas/Student.schema';
 @Injectable()
 export class StudentsService {
   constructor(
-    @InjectModel(Student.name) private StudentModel: Model<Student>,
+    @InjectModel(Student.name) private StudentModel: PaginateModel<Student>,
   ) {}
 
   async create(createStudentDto: CreateStudentDto) {
@@ -33,7 +33,10 @@ export class StudentsService {
 
   // For Super Super Admin
   async findAll() {
-    return await this.StudentModel.find();
+    return await this.StudentModel.paginate(
+      {},
+      { populate: { path: 'class', select: 'title' } },
+    );
   }
 
   async findById(id: string) {

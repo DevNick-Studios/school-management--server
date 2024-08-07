@@ -1,6 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, Types } from 'mongoose';
 import { IUser, AccountTypeEnum } from 'src/shared/interfaces/schema.interface';
+import * as mongoosePaginate from 'mongoose-paginate-v2';
 
 export type UserDocument = HydratedDocument<User>;
 
@@ -23,4 +24,6 @@ export class User implements IUser {
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
+UserSchema.plugin(mongoosePaginate);
+
 UserSchema.index({ email: 1 });

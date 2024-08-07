@@ -1,4 +1,4 @@
-import { IsEnum, IsOptional, IsString } from 'class-validator';
+import { IsEnum, IsNumber, IsOptional, IsString } from 'class-validator';
 import { Types } from 'mongoose';
 import { GenderEnum, IStudent } from 'src/shared/interfaces/schema.interface';
 
@@ -9,11 +9,11 @@ export class CreateStudentDto implements IStudent {
   @IsString()
   name: string;
 
-  @IsString()
+  @IsNumber()
   age: number;
 
   @IsString()
-  currentClass: Types.ObjectId;
+  class: Types.ObjectId;
 
   @IsEnum(GenderEnum)
   @IsOptional()

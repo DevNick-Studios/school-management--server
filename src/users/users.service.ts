@@ -1,5 +1,5 @@
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { PaginateModel } from 'mongoose';
 import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -9,7 +9,7 @@ import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
-  constructor(@InjectModel(User.name) private UserModel: Model<User>) {}
+  constructor(@InjectModel(User.name) private UserModel: PaginateModel<User>) {}
 
   async create(createUserDto: CreateUserDto) {
     return await this.UserModel.create(createUserDto);
@@ -21,7 +21,7 @@ export class UsersService {
 
   // For Super Super Admin
   async findAll() {
-    return await this.UserModel.find();
+    return await this.UserModel.paginate();
   }
 
   async findById(id: string) {

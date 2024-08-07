@@ -14,7 +14,7 @@ import { ScoresModule } from './scores/scores.module';
 
 @Module({
   imports: [
-    MongooseModule.forRoot('mongodb://localhost/nest'),
+    MongooseModule.forRoot('mongodb://localhost/local'),
     AuthModule,
     UsersModule,
     SchoolsModule,

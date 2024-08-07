@@ -1,5 +1,5 @@
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { PaginateModel } from 'mongoose';
 import { Injectable, UnprocessableEntityException } from '@nestjs/common';
 import { CreateSubjectDto } from './dto/create-subject.dto';
 import { UpdateSubjectDto } from './dto/update-subject.dto';
@@ -8,7 +8,7 @@ import { Subject } from './schemas/subjects.schema';
 @Injectable()
 export class SubjectsService {
   constructor(
-    @InjectModel(Subject.name) private SubjectModel: Model<Subject>,
+    @InjectModel(Subject.name) private SubjectModel: PaginateModel<Subject>,
   ) {}
 
   async create(createClassDto: CreateSubjectDto) {
@@ -33,7 +33,7 @@ export class SubjectsService {
 
   // For Super Super Admin
   async findAll() {
-    return await this.SubjectModel.find();
+    return await this.SubjectModel.paginate();
   }
 
   async findById(id: string) {

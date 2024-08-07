@@ -1,5 +1,11 @@
 import { Types } from 'mongoose';
 
+export enum EducationalStage {
+  Nursery = 'Nursery',
+  Primary = 'Primary',
+  Secondary = 'Secondary',
+}
+
 export enum AccountTypeEnum {
   school = 'School',
   teacher = 'Teacher',
@@ -28,6 +34,8 @@ export interface ISchool {
 export interface IClass {
   schoolId: string;
   title: string;
+  stage: EducationalStage;
+  level: number;
 }
 
 export interface ITeacher {
@@ -43,7 +51,7 @@ export interface IStudent {
   name: string;
   age: number;
   gender: GenderEnum;
-  currentClass: Types.ObjectId;
+  class: Types.ObjectId;
   previousClasses?: Types.ObjectId[];
   email?: string;
   password?: string;

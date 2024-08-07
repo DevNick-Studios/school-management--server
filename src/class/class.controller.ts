@@ -11,7 +11,7 @@ import { ClassService } from './class.service';
 import { CreateClassDto } from './dto/create-class.dto';
 import { UpdateClassDto } from './dto/update-class.dto';
 
-@Controller('class')
+@Controller('classes')
 export class ClassController {
   constructor(private readonly classService: ClassService) {}
 
@@ -21,6 +21,11 @@ export class ClassController {
   }
 
   @Get()
+  findAllPaginate() {
+    return this.classService.findAllPaginate();
+  }
+
+  @Get('all')
   findAll() {
     return this.classService.findAll();
   }
