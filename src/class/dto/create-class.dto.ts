@@ -1,10 +1,10 @@
-import { IsEnum, IsNumber, IsString } from 'class-validator';
+import { IsEnum, IsNumber, IsString, Min } from 'class-validator';
 import {
   EducationalStage,
   IClass,
 } from 'src/shared/interfaces/schema.interface';
 
-export class CreateClassDto implements IClass {
+export class CreateClassDto implements Omit<IClass, 'school'> {
   @IsString()
   title: string;
 
@@ -12,8 +12,6 @@ export class CreateClassDto implements IClass {
   stage: EducationalStage; // Use the enum
 
   @IsNumber()
+  @Min(1)
   level: number; // Numeric value for the level within the stage
-
-  @IsString()
-  schoolId: string;
 }

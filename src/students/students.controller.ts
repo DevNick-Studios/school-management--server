@@ -10,19 +10,24 @@ import {
 import { CreateStudentDto } from './dto/create-student.dto';
 import { UpdateStudentDto } from './dto/update-student.dto';
 import { StudentsService } from './students.service';
+import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
+import { IAuthPayload } from 'src/shared/interfaces/schema.interface';
 
 @Controller('students')
 export class StudentsController {
   constructor(private readonly studentsService: StudentsService) {}
 
   @Post()
-  create(@Body() createStudentDto: CreateStudentDto) {
-    return this.studentsService.create(createStudentDto);
+  create(
+    @CurrentUser() user: IAuthPayload,
+    @Body() createStudentDto: CreateStudentDto,
+  ) {
+    return this.studentsService.create({ createStudentDto, user });
   }
 
   @Get()
-  findAll() {
-    return this.studentsService.findAll();
+  findAll(@CurrentUser() user: IAuthPayload) {
+    return this.studentsService.findAll({ user });
   }
 
   @Get('/school/:schoolId')

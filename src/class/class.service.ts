@@ -4,6 +4,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateClassDto } from './dto/create-class.dto';
 import { UpdateClassDto } from './dto/update-class.dto';
 import { Class } from './schemas/Class.schema';
+import { IAuthPayload } from 'src/shared/interfaces/schema.interface';
 
 @Injectable()
 export class ClassService {
@@ -11,8 +12,25 @@ export class ClassService {
     @InjectModel(Class.name) private ClassModel: PaginateModel<Class>,
   ) {}
 
-  async create(createClassDto: CreateClassDto) {
-    return await this.ClassModel.create(createClassDto);
+  async create({
+    user,
+    createClassDto,
+  }: {
+    createClassDto: CreateClassDto;
+    user: IAuthPayload;
+  }) {
+    return await this.ClassModel.create({
+      ...createClassDto,
+      school: user.school,
+    });
+  }
+
+  async findAll({ user }: { user: IAuthPayload }) {
+    return await this.ClassModel.find({ school: user.school });
+  }
+
+  async findAllPaginate({ user }: { user: IAuthPayload }) {
+    return await this.ClassModel.paginate({ school: user.school });
   }
 
   async findOne(email: string) {
@@ -24,11 +42,11 @@ export class ClassService {
   }
 
   // For Super Super Admin
-  async findAllPaginate() {
+  async findAllAdminPaginate() {
     return await this.ClassModel.paginate();
   }
 
-  async findAll() {
+  async findAllAdmin() {
     return await this.ClassModel.find();
   }
 

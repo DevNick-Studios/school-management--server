@@ -1,9 +1,10 @@
 import { InjectModel } from '@nestjs/mongoose';
 import { PaginateModel } from 'mongoose';
-import { Injectable, UnprocessableEntityException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { CreateSubjectDto } from './dto/create-subject.dto';
 import { UpdateSubjectDto } from './dto/update-subject.dto';
 import { Subject } from './schemas/subjects.schema';
+import { IAuthPayload } from 'src/shared/interfaces/schema.interface';
 
 @Injectable()
 export class SubjectsService {
@@ -11,12 +12,21 @@ export class SubjectsService {
     @InjectModel(Subject.name) private SubjectModel: PaginateModel<Subject>,
   ) {}
 
-  async create(createClassDto: CreateSubjectDto) {
-    try {
-      return await this.SubjectModel.create(createClassDto);
-    } catch (error) {
-      throw new UnprocessableEntityException('Couldnt process your request');
-    }
+  async create({
+    user,
+    createSubjectDto,
+  }: {
+    createSubjectDto: CreateSubjectDto;
+    user: IAuthPayload;
+  }) {
+    return await this.SubjectModel.create({
+      ...createSubjectDto,
+      school: user.school,
+    });
+  }
+
+  async findAll({ user }: { user: IAuthPayload }) {
+    return await this.SubjectModel.paginate({ school: user.school });
   }
 
   async findOne(email: string) {
@@ -32,7 +42,7 @@ export class SubjectsService {
   }
 
   // For Super Super Admin
-  async findAll() {
+  async findAllAdmin() {
     return await this.SubjectModel.paginate();
   }
 

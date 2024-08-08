@@ -10,19 +10,24 @@ import {
 import { CreateSubjectDto } from './dto/create-subject.dto';
 import { UpdateSubjectDto } from './dto/update-subject.dto';
 import { SubjectsService } from './subjects.service';
+import { IAuthPayload } from 'src/shared/interfaces/schema.interface';
+import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
 
 @Controller('subjects')
 export class SubjectsController {
   constructor(private readonly subject: SubjectsService) {}
 
   @Post()
-  create(@Body() createSubjectDto: CreateSubjectDto) {
-    return this.subject.create(createSubjectDto);
+  create(
+    @CurrentUser() user: IAuthPayload,
+    @Body() createSubjectDto: CreateSubjectDto,
+  ) {
+    return this.subject.create({ createSubjectDto, user });
   }
 
   @Get()
-  findAll() {
-    return this.subject.findAll();
+  findAll(@CurrentUser() user: IAuthPayload) {
+    return this.subject.findAll({ user });
   }
 
   @Get(':id')

@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument } from 'mongoose';
+import { HydratedDocument, Types } from 'mongoose';
 import { GenderEnum, ITeacher } from 'src/shared/interfaces/schema.interface';
 import * as mongoosePaginate from 'mongoose-paginate-v2';
 
@@ -13,8 +13,8 @@ export class Teacher implements ITeacher {
   @Prop({ required: true })
   password: string;
 
-  @Prop({ required: true })
-  schoolId: string;
+  @Prop({ required: true, type: Types.ObjectId, ref: 'School' })
+  school: string | Types.ObjectId;
 
   @Prop({ required: true, unique: true })
   email: string;
@@ -25,3 +25,5 @@ export class Teacher implements ITeacher {
 
 export const TeacherSchema = SchemaFactory.createForClass(Teacher);
 TeacherSchema.plugin(mongoosePaginate);
+
+TeacherSchema.index({ school: 1 });

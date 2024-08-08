@@ -1,7 +1,7 @@
 import { IsEnum, IsOptional, IsString } from 'class-validator';
 import { GenderEnum, ITeacher } from 'src/shared/interfaces/schema.interface';
 
-export class CreateTeacherDto implements ITeacher {
+export class CreateTeacherDto implements Omit<ITeacher, 'school'> {
   @IsString()
   name: string;
 
@@ -10,9 +10,6 @@ export class CreateTeacherDto implements ITeacher {
 
   @IsString()
   email: string;
-
-  @IsString()
-  schoolId: string;
 
   @IsEnum(GenderEnum)
   @IsOptional()

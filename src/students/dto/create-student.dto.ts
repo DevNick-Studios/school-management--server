@@ -2,10 +2,7 @@ import { IsEnum, IsNumber, IsOptional, IsString } from 'class-validator';
 import { Types } from 'mongoose';
 import { GenderEnum, IStudent } from 'src/shared/interfaces/schema.interface';
 
-export class CreateStudentDto implements IStudent {
-  @IsString()
-  schoolId: string;
-
+export class CreateStudentDto implements Omit<IStudent, 'school'> {
   @IsString()
   name: string;
 

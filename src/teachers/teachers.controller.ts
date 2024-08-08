@@ -10,19 +10,30 @@ import {
 import { TeachersService } from './teachers.service';
 import { CreateTeacherDto } from './dto/create-teacher.dto';
 import { UpdateTeacherDto } from './dto/update-teacher.dto';
+import { IAuthPayload } from 'src/shared/interfaces/schema.interface';
+import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
 
 @Controller('teachers')
 export class TeachersController {
   constructor(private readonly teachersService: TeachersService) {}
 
   @Post()
-  create(@Body() createTeacherDto: CreateTeacherDto) {
-    return this.teachersService.create(createTeacherDto);
+  create(
+    @CurrentUser() user: IAuthPayload,
+    @Body() createTeacherDto: CreateTeacherDto,
+  ) {
+    return this.teachersService.create({ createTeacherDto, user });
   }
 
   @Get()
-  findAll() {
-    return this.teachersService.findAll();
+  findAll(@CurrentUser() user: IAuthPayload) {
+    return this.teachersService.findAll({ user });
+  }
+
+  // Admin
+  @Get()
+  findAllAdmin() {
+    return this.teachersService.findAllAdmin();
   }
 
   @Get('/school/:schoolId')

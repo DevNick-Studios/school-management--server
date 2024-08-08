@@ -19,6 +19,10 @@ export class UsersService {
     return await this.UserModel.findOne({ email }).lean();
   }
 
+  async findAndPopulateUser(email: string) {
+    return await this.UserModel.findOne({ email }).populate('account').lean();
+  }
+
   // For Super Super Admin
   async findAll() {
     return await this.UserModel.paginate();

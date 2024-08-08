@@ -10,24 +10,34 @@ import {
 import { ClassService } from './class.service';
 import { CreateClassDto } from './dto/create-class.dto';
 import { UpdateClassDto } from './dto/update-class.dto';
+import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
+import { IAuthPayload } from 'src/shared/interfaces/schema.interface';
 
 @Controller('classes')
 export class ClassController {
   constructor(private readonly classService: ClassService) {}
 
   @Post()
-  create(@Body() createClassDto: CreateClassDto) {
-    return this.classService.create(createClassDto);
+  create(
+    @CurrentUser() user: IAuthPayload,
+    @Body() createClassDto: CreateClassDto,
+  ) {
+    return this.classService.create({ createClassDto, user });
   }
 
   @Get()
-  findAllPaginate() {
-    return this.classService.findAllPaginate();
+  findAllPaginate(@CurrentUser() user: IAuthPayload) {
+    return this.classService.findAllPaginate({ user });
   }
 
   @Get('all')
-  findAll() {
-    return this.classService.findAll();
+  findAll(@CurrentUser() user: IAuthPayload) {
+    return this.classService.findAll({ user });
+  }
+
+  @Get('admin')
+  findAllAdmin() {
+    return this.classService.findAllAdmin();
   }
 
   @Get(':id')

@@ -5,7 +5,10 @@ import { CreateTeacherDto } from './dto/create-teacher.dto';
 import { UpdateTeacherDto } from './dto/update-teacher.dto';
 import { Teacher } from './schemas/teacher.schema';
 import { UsersService } from 'src/users/users.service';
-import { AccountTypeEnum } from 'src/shared/interfaces/schema.interface';
+import {
+  AccountTypeEnum,
+  IAuthPayload,
+} from 'src/shared/interfaces/schema.interface';
 
 @Injectable()
 export class TeachersService {
@@ -14,7 +17,13 @@ export class TeachersService {
     private readonly usersService: UsersService,
   ) {}
 
-  async create(createTeacherDto: CreateTeacherDto) {
+  async create({
+    createTeacherDto,
+    user: authUser,
+  }: {
+    createTeacherDto: CreateTeacherDto;
+    user: IAuthPayload;
+  }) {
     const { password: userPassword, ...other } = createTeacherDto;
     const user = await this.usersService.findOne(other.email);
 
@@ -29,7 +38,10 @@ export class TeachersService {
       role: AccountTypeEnum.teacher,
     });
 
-    const teacher = await this.TeacherModel.create(createTeacherDto);
+    const teacher = await this.TeacherModel.create({
+      ...createTeacherDto,
+      school: authUser.school,
+    });
 
     newUser.account = teacher._id;
     await newUser.save();
@@ -45,8 +57,12 @@ export class TeachersService {
     return await this.TeacherModel.find({ schoolId });
   }
 
+  async findAll({ user }: { user: IAuthPayload }) {
+    return await this.TeacherModel.paginate({ school: user.school });
+  }
+
   // For Super Super Admin
-  async findAll() {
+  async findAllAdmin() {
     return await this.TeacherModel.paginate();
   }
 

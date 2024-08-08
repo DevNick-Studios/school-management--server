@@ -10,8 +10,8 @@ export class Student implements IStudent {
   @Prop({ required: true })
   name: string;
 
-  @Prop({ required: true })
-  schoolId: string;
+  @Prop({ required: true, type: Types.ObjectId, ref: 'School' })
+  school: string | Types.ObjectId;
 
   @Prop({ required: true })
   age: number;
@@ -31,3 +31,5 @@ export class Student implements IStudent {
 
 export const StudentSchema = SchemaFactory.createForClass(Student);
 StudentSchema.plugin(mongoosePaginate);
+
+StudentSchema.index({ school: 1 });

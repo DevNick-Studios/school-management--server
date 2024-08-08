@@ -1,9 +1,10 @@
 import { InjectModel } from '@nestjs/mongoose';
 import { PaginateModel } from 'mongoose';
-import { Injectable, UnprocessableEntityException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { CreateStudentDto } from './dto/create-student.dto';
 import { UpdateStudentDto } from './dto/update-student.dto';
 import { Student } from './schemas/Student.schema';
+import { IAuthPayload } from 'src/shared/interfaces/schema.interface';
 
 @Injectable()
 export class StudentsService {
@@ -11,12 +12,24 @@ export class StudentsService {
     @InjectModel(Student.name) private StudentModel: PaginateModel<Student>,
   ) {}
 
-  async create(createStudentDto: CreateStudentDto) {
-    try {
-      return await this.StudentModel.create(createStudentDto);
-    } catch (error) {
-      throw new UnprocessableEntityException('Couldnt process your request');
-    }
+  async create({
+    user,
+    createStudentDto,
+  }: {
+    createStudentDto: CreateStudentDto;
+    user: IAuthPayload;
+  }) {
+    return await this.StudentModel.create({
+      ...createStudentDto,
+      school: user.school,
+    });
+  }
+
+  async findAll({ user }: { user: IAuthPayload }) {
+    return await this.StudentModel.paginate(
+      { school: user.school },
+      { populate: { path: 'class', select: 'title' } },
+    );
   }
 
   async findOne(email: string) {
@@ -32,7 +45,7 @@ export class StudentsService {
   }
 
   // For Super Super Admin
-  async findAll() {
+  async findAllAdmin() {
     return await this.StudentModel.paginate(
       {},
       { populate: { path: 'class', select: 'title' } },
