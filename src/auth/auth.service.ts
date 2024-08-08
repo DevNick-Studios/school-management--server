@@ -1,11 +1,15 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { UsersService } from 'src/users/users.service';
 import { CreateAuthDto, LoginDto } from './dto/create-auth.dto';
-
 import { JwtService } from '@nestjs/jwt';
 import { Response } from 'express';
 import { SchoolsService } from 'src/schools/schools.service';
-import { AccountTypeEnum } from 'src/shared/interfaces/schema.interface';
+import {
+  AccountTypeEnum,
+  IAuthPayload,
+  ISchool,
+  ITeacher,
+} from 'src/shared/interfaces/schema.interface';
 
 @Injectable()
 export class AuthService {
@@ -43,17 +47,30 @@ export class AuthService {
   }
 
   async login(loginDto: LoginDto, response: Response) {
-    const { password, ...user } = await this.usersService.findOne(
+    const foundUser = await this.usersService.findAndPopulateUser(
       loginDto.email,
     );
 
-    if (!user) {
+    if (!foundUser) {
       throw new BadRequestException('User does not exist');
     }
 
+    const { password, ...user } = foundUser;
+
     await this.usersService.comparePassword(password, loginDto.password);
 
-    const payload = { sub: user._id, role: user.role, email: user.email };
+    const payload: IAuthPayload = {
+      sub: user._id,
+      role: user.role,
+      email: user.email,
+      school: '',
+    };
+
+    if (foundUser.role === 'Teacher') {
+      payload.school = (foundUser.account as ITeacher).school.toString();
+    } else {
+      payload.school = (foundUser.account as ISchool)._id;
+    }
 
     const expires = new Date();
     expires.setSeconds(expires.getSeconds() + 360000);
@@ -68,6 +85,7 @@ export class AuthService {
 
     return {
       ...user,
+      account: payload.school,
       access_token: token,
     };
   }
