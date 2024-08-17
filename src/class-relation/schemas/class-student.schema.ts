@@ -3,21 +3,18 @@ import { Types } from 'mongoose';
 import * as mongoosePaginate from 'mongoose-paginate-v2';
 
 @Schema({ timestamps: true })
-export class ClassStudents {
+export class ClassStudent {
   @Prop({ required: true, type: Types.ObjectId, ref: 'Class' })
   class: Types.ObjectId;
 
   @Prop({ required: true, type: Types.ObjectId, ref: 'Student' })
   student: Types.ObjectId;
 
-  @Prop({ required: true, type: Types.ObjectId, ref: 'School' })
-  school: Types.ObjectId;
-
   @Prop({ required: true })
   academicYear: string;
 }
 
-export const ClassStudentsSchema = SchemaFactory.createForClass(ClassStudents);
+export const ClassStudentsSchema = SchemaFactory.createForClass(ClassStudent);
 ClassStudentsSchema.plugin(mongoosePaginate);
 
 ClassStudentsSchema.index(

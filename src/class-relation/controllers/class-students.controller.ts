@@ -1,14 +1,14 @@
 import { Controller, Post, Body, Get, Param, Delete } from '@nestjs/common';
-import { ClassStudentsService } from '../services/class-students.service';
-import { CreateClassStudentsDto } from '../dto/creates.dto';
+import { ClassStudentService } from '../services/class-students.service';
+import { CreateClassStudentDto } from '../dto/creates.dto';
 
 @Controller('class-students')
 export class ClassStudentsController {
-  constructor(private readonly classStudentsService: ClassStudentsService) {}
+  constructor(private readonly classStudentService: ClassStudentService) {}
 
   @Post()
-  async assignStudent(@Body() createClassStudentsDto: CreateClassStudentsDto) {
-    return this.classStudentsService.assignStudent(createClassStudentsDto);
+  async assignStudent(@Body() createClassStudentDto: CreateClassStudentDto) {
+    return this.classStudentService.assignStudent(createClassStudentDto);
   }
 
   @Get(':classId/:academicYear')
@@ -16,7 +16,7 @@ export class ClassStudentsController {
     @Param('classId') classId: string,
     @Param('academicYear') academicYear: string,
   ) {
-    return this.classStudentsService.findAllForClass(classId, academicYear);
+    return this.classStudentService.findAllForClass(classId, academicYear);
   }
 
   @Delete(':classId/:studentId/:academicYear')
@@ -25,7 +25,7 @@ export class ClassStudentsController {
     @Param('studentId') studentId: string,
     @Param('academicYear') academicYear: string,
   ) {
-    return this.classStudentsService.removeStudentFromClass(
+    return this.classStudentService.removeStudentFromClass(
       classId,
       studentId,
       academicYear,

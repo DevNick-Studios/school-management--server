@@ -21,6 +21,9 @@ export class Teacher implements ITeacher {
 
   @Prop({ type: String, enum: GenderEnum })
   gender?: GenderEnum;
+
+  @Prop({ type: [{ type: Types.ObjectId, ref: 'Subject' }] })
+  subjects: Types.ObjectId[];
 }
 
 export const TeacherSchema = SchemaFactory.createForClass(Teacher);

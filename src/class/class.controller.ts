@@ -35,6 +35,11 @@ export class ClassController {
     return this.classService.findAll({ user });
   }
 
+  @Get('teacher')
+  findTeacherClasses(@CurrentUser() user: IAuthPayload) {
+    return this.classService.findAll({ user });
+  }
+
   @Get('admin')
   findAllAdmin() {
     return this.classService.findAllAdmin();

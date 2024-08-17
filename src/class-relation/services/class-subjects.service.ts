@@ -1,24 +1,24 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { ClassSubjects } from '../schemas/class.subject.schema';
-import { CreateClassSubjectsDto } from '../dto/creates.dto';
+import { ClassSubject } from '../schemas/class.subject.schema';
+import { CreateClassSubjectDto } from '../dto/creates.dto';
 
 @Injectable()
 export class ClassSubjectsService {
   constructor(
-    @InjectModel(ClassSubjects.name)
-    private classSubjectsModel: Model<ClassSubjects>,
+    @InjectModel(ClassSubject.name)
+    private classSubjectsModel: Model<ClassSubject>,
   ) {}
 
   async assignSubject(
-    createClassSubjectsDto: CreateClassSubjectsDto,
-  ): Promise<ClassSubjects> {
-    const assignment = new this.classSubjectsModel(createClassSubjectsDto);
+    createClassSubjectDto: CreateClassSubjectDto,
+  ): Promise<ClassSubject> {
+    const assignment = new this.classSubjectsModel(createClassSubjectDto);
     return assignment.save();
   }
 
-  async findAllForClass(classId: string): Promise<ClassSubjects[]> {
+  async findAllForClass(classId: string): Promise<ClassSubject[]> {
     return this.classSubjectsModel
       .find({ class: classId })
       .populate('subject teacher')

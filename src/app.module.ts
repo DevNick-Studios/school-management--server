@@ -11,6 +11,7 @@ import { StudentsModule } from './students/students.module';
 import { SubjectsModule } from './subjects/subjects.module';
 import { SharedModule } from './shared/shared.module';
 import { ScoresModule } from './scores/scores.module';
+import { ClassRelationModule } from './class-relation/class-relation.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { ScoresModule } from './scores/scores.module';
     SubjectsModule,
     SharedModule,
     ScoresModule,
+    ClassRelationModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -1,13 +1,13 @@
 import { Controller, Post, Body, Get, Param, Delete } from '@nestjs/common';
 import { ClassSubjectsService } from '../services/class-subjects.service';
-import { CreateClassSubjectsDto } from '../dto/creates.dto';
+import { CreateClassSubjectDto } from '../dto/creates.dto';
 
 @Controller('class-subjects')
 export class ClassSubjectsController {
   constructor(private readonly classSubjectsService: ClassSubjectsService) {}
 
   @Post()
-  async assignSubject(@Body() createClassSubjectsDto: CreateClassSubjectsDto) {
+  async assignSubject(@Body() createClassSubjectsDto: CreateClassSubjectDto) {
     return this.classSubjectsService.assignSubject(createClassSubjectsDto);
   }
 

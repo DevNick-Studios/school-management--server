@@ -29,6 +29,10 @@ export class ClassService {
     return await this.ClassModel.find({ school: user.school });
   }
 
+  async findTeacherClasses({ user }: { user: IAuthPayload }) {
+    return await this.ClassModel.find({ school: user.school });
+  }
+
   async findAllPaginate({ user }: { user: IAuthPayload }) {
     return await this.ClassModel.paginate({ school: user.school });
   }
