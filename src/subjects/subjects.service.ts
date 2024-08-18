@@ -25,8 +25,12 @@ export class SubjectsService {
     });
   }
 
-  async findAll({ user }: { user: IAuthPayload }) {
+  async findAllPaginate({ user }: { user: IAuthPayload }) {
     return await this.SubjectModel.paginate({ school: user.school });
+  }
+
+  async findAll({ user }: { user: IAuthPayload }) {
+    return await this.SubjectModel.find({ school: user.school });
   }
 
   async findOne(email: string) {

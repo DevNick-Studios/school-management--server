@@ -4,7 +4,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateClassDto } from './dto/create-class.dto';
 import { UpdateClassDto } from './dto/update-class.dto';
 import { Class } from './schemas/Class.schema';
-import { IAuthPayload } from 'src/shared/interfaces/schema.interface';
+import { IAuthPayload, IClass } from 'src/shared/interfaces/schema.interface';
 
 @Injectable()
 export class ClassService {
@@ -37,12 +37,16 @@ export class ClassService {
     return await this.ClassModel.paginate({ school: user.school });
   }
 
-  async findOne(email: string) {
-    return await this.ClassModel.findOne({ email });
-  }
-
   async findSchoolClasses(schoolId: string) {
     return await this.ClassModel.find({ schoolId });
+  }
+
+  async findById(id: string) {
+    return await this.ClassModel.findById(id);
+  }
+
+  async findOne(data: Partial<IClass>) {
+    return await this.ClassModel.findById(data);
   }
 
   // For Super Super Admin
@@ -52,10 +56,6 @@ export class ClassService {
 
   async findAllAdmin() {
     return await this.ClassModel.find();
-  }
-
-  async findById(id: string) {
-    return await this.ClassModel.findById(id);
   }
 
   async update(id: string, updateClassDto: UpdateClassDto) {

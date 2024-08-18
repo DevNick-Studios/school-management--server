@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { PaginateModel } from 'mongoose';
 import { ClassSubject } from '../schemas/class.subject.schema';
 import { CreateClassSubjectDto } from '../dto/creates.dto';
 
@@ -8,7 +8,7 @@ import { CreateClassSubjectDto } from '../dto/creates.dto';
 export class ClassSubjectsService {
   constructor(
     @InjectModel(ClassSubject.name)
-    private classSubjectsModel: Model<ClassSubject>,
+    private classSubjectsModel: PaginateModel<ClassSubject>,
   ) {}
 
   async assignSubject(
@@ -18,11 +18,13 @@ export class ClassSubjectsService {
     return assignment.save();
   }
 
-  async findAllForClass(classId: string): Promise<ClassSubject[]> {
-    return this.classSubjectsModel
-      .find({ class: classId })
-      .populate('subject teacher')
-      .exec();
+  async findAllForClass(classId: string) {
+    return await this.classSubjectsModel.paginate(
+      {
+        class: classId,
+      },
+      { populate: 'subject teacher' },
+    );
   }
 
   async removeAssignment(classId: string, subjectId: string): Promise<void> {

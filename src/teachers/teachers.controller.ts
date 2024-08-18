@@ -25,9 +25,14 @@ export class TeachersController {
     return this.teachersService.create({ createTeacherDto, user });
   }
 
-  @Get()
+  @Get('all')
   findAll(@CurrentUser() user: IAuthPayload) {
     return this.teachersService.findAll({ user });
+  }
+
+  @Get()
+  findAllPaginate(@CurrentUser() user: IAuthPayload) {
+    return this.teachersService.findAllPaginate({ user });
   }
 
   // Admin

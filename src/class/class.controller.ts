@@ -47,7 +47,7 @@ export class ClassController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.classService.findOne(id);
+    return this.classService.findById(id);
   }
 
   @Get('/school/:schoolId')

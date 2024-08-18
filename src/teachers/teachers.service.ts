@@ -57,8 +57,12 @@ export class TeachersService {
     return await this.TeacherModel.find({ schoolId });
   }
 
-  async findAll({ user }: { user: IAuthPayload }) {
+  async findAllPaginate({ user }: { user: IAuthPayload }) {
     return await this.TeacherModel.paginate({ school: user.school });
+  }
+
+  async findAll({ user }: { user: IAuthPayload }) {
+    return await this.TeacherModel.find({ school: user.school });
   }
 
   // For Super Super Admin

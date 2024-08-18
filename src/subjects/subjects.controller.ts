@@ -26,6 +26,11 @@ export class SubjectsController {
   }
 
   @Get()
+  findAllPaginate(@CurrentUser() user: IAuthPayload) {
+    return this.subject.findAllPaginate({ user });
+  }
+
+  @Get('all')
   findAll(@CurrentUser() user: IAuthPayload) {
     return this.subject.findAll({ user });
   }
