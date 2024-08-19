@@ -12,6 +12,7 @@ import { SubjectsModule } from './subjects/subjects.module';
 import { SharedModule } from './shared/shared.module';
 import { ScoresModule } from './scores/scores.module';
 import { ClassRelationModule } from './class-relation/class-relation.module';
+import { AcademicYearModule } from './academic-year/academic-year.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { ClassRelationModule } from './class-relation/class-relation.module';
     SharedModule,
     ScoresModule,
     ClassRelationModule,
+    AcademicYearModule,
   ],
   controllers: [AppController],
   providers: [AppService],
