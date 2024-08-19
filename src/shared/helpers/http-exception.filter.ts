@@ -18,6 +18,12 @@ export class AllExceptionsFilter implements ExceptionFilter {
 
     const ctx = host.switchToHttp();
 
+    // console.error(
+    //   `Error processing request for ${ctx.getRequest().method} ${ctx.getRequest().url}, Message: ${exception['message']}, Stack: ${exception['stack']}`,
+    // );
+
+    const errorMessage = (exception as { message: string }).message;
+
     const values =
       exception instanceof HttpException
         ? {
@@ -25,15 +31,36 @@ export class AllExceptionsFilter implements ExceptionFilter {
             message:
               exception.getResponse() instanceof String
                 ? exception.getResponse()
-                : (exception.getResponse() as { message: string[] })
-                    ?.message?.[0],
+                : (exception.getResponse() as { message: string })?.message,
           }
         : {
-            status: HttpStatus.INTERNAL_SERVER_ERROR,
-            message: (exception as any)?.message || 'A new error Occured',
+            statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
+            message: errorMessage || 'A new error Occured',
           };
 
-    // console.log({ values: values.message, exception });
+    const value = errorMessage.includes('E11000 duplicate key error');
+    if (value) {
+      const duplicateKeyRegex = /dup key:\s+({.*})/;
+
+      const match = errorMessage.match(duplicateKeyRegex);
+
+      if (match && match[1]) {
+        const jsonString = match[1]
+          .replace(/'/g, '"') // Ensure keys and values are in double quotes
+          .replace(/(\w+):/g, '"$1":'); // Add double quotes around keys if missing
+
+        try {
+          const parsedObject = JSON.parse(jsonString);
+
+          const fields = Object.keys(parsedObject);
+          values.message = `${fields.join(' and ')} must be unique. Fields already exists, use another value`;
+        } catch (error) {
+          console.error('Failed to parse JSON:', error);
+        }
+      } else {
+        console.log('Duplicate Key not found', match);
+      }
+    }
 
     const responseBody = {
       statusCode: values.statusCode,
@@ -41,8 +68,6 @@ export class AllExceptionsFilter implements ExceptionFilter {
       timestamp: new Date().toISOString(),
       path: httpAdapter.getRequestUrl(ctx.getRequest()),
     };
-
-    console.log({ responseBody });
 
     httpAdapter.reply(ctx.getResponse(), responseBody, values.statusCode);
   }
