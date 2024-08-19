@@ -10,12 +10,14 @@ import {
   ISchool,
   ITeacher,
 } from 'src/shared/interfaces/schema.interface';
+import { AcademicYearService } from 'src/academic-year/academic-year.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly usersService: UsersService,
     private readonly schoolsService: SchoolsService,
+    private readonly academicYearService: AcademicYearService,
     private jwtService: JwtService,
   ) {}
 
@@ -64,6 +66,7 @@ export class AuthService {
       role: user.role,
       email: user.email,
       school: '',
+      academicYear: '',
     };
 
     if (foundUser.role === 'Teacher') {
@@ -71,6 +74,13 @@ export class AuthService {
     } else {
       payload.school = (foundUser.account as ISchool)._id;
     }
+
+    const academicYear =
+      await this.academicYearService.getActiveAcademicYearBySchoolId({
+        school: payload.school,
+      });
+
+    payload.academicYear = academicYear._id.toString();
 
     const expires = new Date();
     expires.setSeconds(expires.getSeconds() + 360000);

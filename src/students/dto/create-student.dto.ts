@@ -9,8 +9,9 @@ export class CreateStudentDto implements Omit<IStudent, 'school'> {
   @IsNumber()
   age: number;
 
+  @IsOptional()
   @IsString()
-  class: Types.ObjectId;
+  currentClass: Types.ObjectId;
 
   @IsEnum(GenderEnum)
   @IsOptional()

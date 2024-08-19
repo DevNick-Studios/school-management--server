@@ -28,7 +28,7 @@ export class StudentsService {
   async findAll({ user }: { user: IAuthPayload }) {
     return await this.StudentModel.paginate(
       { school: user.school },
-      { populate: { path: 'class', select: 'title' } },
+      { populate: { path: 'currentClass', select: 'title' } },
     );
   }
 

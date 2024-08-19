@@ -3,13 +3,37 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { ClassStudent } from '../schemas/class-student.schema';
 import { CreateClassStudentDto } from '../dto/creates.dto';
+import { StudentsService } from 'src/students/students.service';
+import { CreateStudentDto } from 'src/students/dto/create-student.dto';
+import { IAuthPayload } from 'src/shared/interfaces/schema.interface';
 
 @Injectable()
 export class ClassStudentService {
   constructor(
     @InjectModel(ClassStudent.name)
     private classStudentModel: Model<ClassStudent>,
+    private readonly studentsService: StudentsService,
   ) {}
+
+  async createStudent({
+    user,
+    createStudentDto,
+  }: {
+    createStudentDto: CreateStudentDto;
+    user: IAuthPayload;
+  }): Promise<ClassStudent> {
+    const student = await this.studentsService.create({
+      user,
+      createStudentDto,
+    });
+
+    const assignment = new this.classStudentModel({
+      student: student._id,
+      class: createStudentDto.currentClass,
+      academicYear: user.academicYear,
+    });
+    return assignment.save();
+  }
 
   async assignStudent(
     createClassStudentDto: CreateClassStudentDto,

@@ -19,8 +19,8 @@ export class Student implements IStudent {
   @Prop({ required: true, type: String, enum: GenderEnum })
   gender: GenderEnum;
 
-  @Prop({ type: Types.ObjectId, ref: 'Class', required: true })
-  class: Types.ObjectId;
+  @Prop({ type: Types.ObjectId, ref: 'Class' })
+  currentClass?: Types.ObjectId;
 
   @Prop({})
   email?: string;

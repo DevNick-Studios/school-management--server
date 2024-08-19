@@ -29,6 +29,7 @@ export interface IAuthPayload {
   role: string;
   email: string;
   school: string;
+  academicYear: string;
 }
 
 export interface IAuthRequest extends Request {
@@ -70,10 +71,17 @@ export interface IStudent extends Base {
   name: string;
   age: number;
   gender: GenderEnum;
-  class: Types.ObjectId;
-  previousClasses?: Types.ObjectId[];
+  currentClass?: Types.ObjectId;
+  // previousClasses?: Types.ObjectId[];
   email?: string;
   password?: string;
+}
+
+export interface IAcademicYear extends Base {
+  school: string | Types.ObjectId;
+  startYear: number;
+  endYear: number;
+  isActive: boolean;
 }
 
 export interface ISubject extends Base {

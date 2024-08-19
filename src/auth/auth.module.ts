@@ -7,11 +7,13 @@ import { jwtConstants } from './constants';
 import { SchoolsModule } from 'src/schools/schools.module';
 import { AuthGuard } from './guards/auth.guard';
 import { APP_GUARD } from '@nestjs/core';
+import { AcademicYearModule } from 'src/academic-year/academic-year.module';
 
 @Module({
   imports: [
     UsersModule,
     SchoolsModule,
+    AcademicYearModule,
     JwtModule.register({
       global: true,
       secret: jwtConstants.secret,
