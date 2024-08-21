@@ -67,17 +67,20 @@ export class AuthService {
     await this.usersService.comparePassword(password, loginDto.password);
 
     const payload: IAuthPayload = {
-      sub: user._id,
+      id: user._id,
       role: user.role,
       email: user.email,
       school: '',
+      accountId: '',
       academicYear: '',
     };
 
     if (foundUser.role === 'Teacher') {
       payload.school = (foundUser.account as ITeacher).school.toString();
+      payload.accountId = (foundUser.account as ITeacher)._id;
     } else {
       payload.school = (foundUser.account as ISchool)._id;
+      payload.accountId = (foundUser.account as ISchool)._id;
     }
 
     const academicYear =
@@ -100,7 +103,8 @@ export class AuthService {
 
     return {
       ...user,
-      account: payload.school,
+      ...payload,
+      school: payload.school,
       academicYear: payload.academicYear,
       accessToken: token,
     };

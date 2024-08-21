@@ -25,9 +25,10 @@ export enum GenderEnum {
 }
 
 export interface IAuthPayload {
-  sub: string | Types.ObjectId;
+  id: string | Types.ObjectId;
   role: string;
   email: string;
+  accountId: string;
   school: string;
   academicYear: string;
 }
