@@ -11,7 +11,7 @@ export class ClassStudent {
   student: Types.ObjectId;
 
   @Prop({ required: true, type: Types.ObjectId, ref: 'AcademicYear' })
-  academicYear: string;
+  academicYear: Types.ObjectId;
 }
 
 export const ClassStudentsSchema = SchemaFactory.createForClass(ClassStudent);

@@ -27,6 +27,17 @@ export class ClassSubjectsService {
     );
   }
 
+  async findAllForTeacher({ teacherId }: { teacherId: string }) {
+    // const val = toObjectId(teacherId);
+    // console.log({ val, teacherId });
+    return await this.classSubjectsModel.paginate(
+      {
+        teacher: teacherId,
+      },
+      { populate: 'subject class' },
+    );
+  }
+
   async removeAssignment(classId: string, subjectId: string): Promise<void> {
     const result = await this.classSubjectsModel
       .deleteOne({ class: classId, subject: subjectId })

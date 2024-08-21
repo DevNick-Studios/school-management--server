@@ -16,6 +16,11 @@ export class ClassSubjectsController {
     return this.classSubjectsService.findAllForClass(classId);
   }
 
+  @Get('teachers/:teacherId')
+  async findAllTeacherSubjects(@Param('teacherId') teacherId: string) {
+    return this.classSubjectsService.findAllForTeacher({ teacherId });
+  }
+
   @Delete(':classId/:subjectId')
   async removeAssignment(
     @Param('classId') classId: string,
