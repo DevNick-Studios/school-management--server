@@ -42,6 +42,11 @@ export class AuthService {
       owner: newUser._id,
     });
 
+    //   const academicYear =
+    // await this.academicYearService.getActiveAcademicYearBySchoolId({
+    //   school: payload.school,
+    // });
+
     newUser.account = school._id;
     await newUser.save();
 
@@ -80,7 +85,7 @@ export class AuthService {
         school: payload.school,
       });
 
-    payload.academicYear = academicYear._id.toString();
+    payload.academicYear = academicYear._id?.toString();
 
     const expires = new Date();
     expires.setSeconds(expires.getSeconds() + 360000);
@@ -96,7 +101,8 @@ export class AuthService {
     return {
       ...user,
       account: payload.school,
-      access_token: token,
+      academicYear: payload.academicYear,
+      accessToken: token,
     };
   }
 }

@@ -20,9 +20,14 @@ export class AcademicYearController {
   }
 
   @Get()
-  async findAll(@CurrentUser() user: IAuthPayload) {
+  async findAllPaginate(@CurrentUser() user: IAuthPayload) {
     console.log({ id: user });
     return this.academicYearService.getAcademicYears({ user });
+  }
+
+  @Get('all')
+  async findAll(@CurrentUser() user: IAuthPayload) {
+    return this.academicYearService.getAllAcademicYears({ user });
   }
 
   @Get('active')

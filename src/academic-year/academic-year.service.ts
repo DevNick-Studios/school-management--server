@@ -40,6 +40,10 @@ export class AcademicYearService {
     return this.academicYearModel.paginate({ school: user.school });
   }
 
+  async getAllAcademicYears({ user }: { user: IAuthPayload }) {
+    return this.academicYearModel.find({ school: user.school });
+  }
+
   async getActiveAcademicYear({
     user,
   }: {
@@ -56,7 +60,7 @@ export class AcademicYearService {
   async getActiveAcademicYearBySchoolId({ school }: { school: string }) {
     return this.academicYearModel
       .findOne({
-        school,
+        school: school.toString(),
         isActive: true,
       })
       .exec();

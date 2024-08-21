@@ -10,7 +10,7 @@ export class ClassStudent {
   @Prop({ required: true, type: Types.ObjectId, ref: 'Student' })
   student: Types.ObjectId;
 
-  @Prop({ required: true })
+  @Prop({ required: true, type: Types.ObjectId, ref: 'AcademicYear' })
   academicYear: string;
 }
 

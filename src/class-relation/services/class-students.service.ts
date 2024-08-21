@@ -1,17 +1,17 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
 import { ClassStudent } from '../schemas/class-student.schema';
 import { CreateClassStudentDto } from '../dto/creates.dto';
 import { StudentsService } from 'src/students/students.service';
 import { CreateStudentDto } from 'src/students/dto/create-student.dto';
 import { IAuthPayload } from 'src/shared/interfaces/schema.interface';
+import { PaginateModel } from 'mongoose';
 
 @Injectable()
 export class ClassStudentService {
   constructor(
     @InjectModel(ClassStudent.name)
-    private classStudentModel: Model<ClassStudent>,
+    private classStudentModel: PaginateModel<ClassStudent>,
     private readonly studentsService: StudentsService,
   ) {}
 
@@ -42,14 +42,11 @@ export class ClassStudentService {
     return assignment.save();
   }
 
-  async findAllForClass(
-    classId: string,
-    academicYear: string,
-  ): Promise<ClassStudent[]> {
-    return this.classStudentModel
-      .find({ class: classId, academicYear })
-      .populate('student')
-      .exec();
+  async findAllForClass(classId: string, academicYear: string) {
+    return this.classStudentModel.paginate(
+      { class: classId, academicYear },
+      { populate: 'student academicYear' },
+    );
   }
 
   async removeStudentFromClass(

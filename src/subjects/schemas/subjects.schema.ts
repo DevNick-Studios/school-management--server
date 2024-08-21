@@ -22,3 +22,4 @@ export const SubjectSchema = SchemaFactory.createForClass(Subject);
 SubjectSchema.plugin(mongoosePaginate);
 
 SubjectSchema.index({ school: 1 });
+SubjectSchema.index({ school: 1, title: 1 }, { unique: true });

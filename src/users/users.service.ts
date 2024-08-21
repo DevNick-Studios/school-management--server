@@ -44,7 +44,7 @@ export class UsersService {
     try {
       return await bcrypt.hash(password, 10);
     } catch (e) {
-      console.log(e);
+      // console.log(e);
       throw new UnauthorizedException("You're not authorized");
     }
   }
@@ -53,7 +53,7 @@ export class UsersService {
     try {
       return await bcrypt.compare(password1, password2);
     } catch (e) {
-      console.log(e);
+      // console.log(e);
       throw new UnauthorizedException("You're not authorized");
     }
   }

@@ -24,7 +24,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
 
     const errorMessage = (exception as { message: string }).message;
 
-    const values =
+    const responseObj =
       exception instanceof HttpException
         ? {
             statusCode: exception.getStatus(),
@@ -38,22 +38,24 @@ export class AllExceptionsFilter implements ExceptionFilter {
             message: errorMessage || 'A new error Occured',
           };
 
-    const value = errorMessage.includes('E11000 duplicate key error');
-    if (value) {
+    const isDuplicateError = errorMessage.includes(
+      'E11000 duplicate key error',
+    );
+    if (isDuplicateError) {
       const duplicateKeyRegex = /dup key:\s+({.*})/;
 
       const match = errorMessage.match(duplicateKeyRegex);
 
       if (match && match[1]) {
         const jsonString = match[1]
-          .replace(/'/g, '"') // Ensure keys and values are in double quotes
+          .replace(/'/g, '"') // Ensure keys and responseObj are in double quotes
           .replace(/(\w+):/g, '"$1":'); // Add double quotes around keys if missing
 
         try {
           const parsedObject = JSON.parse(jsonString);
 
           const fields = Object.keys(parsedObject);
-          values.message = `${fields.join(' and ')} must be unique. Fields already exists, use another value`;
+          responseObj.message = `${fields.join(' and ')} must be unique. Fields already exists, use another value`;
         } catch (error) {
           console.error('Failed to parse JSON:', error);
         }
@@ -63,12 +65,12 @@ export class AllExceptionsFilter implements ExceptionFilter {
     }
 
     const responseBody = {
-      statusCode: values.statusCode,
-      message: values.message,
+      statusCode: responseObj.statusCode,
+      message: responseObj.message,
       timestamp: new Date().toISOString(),
       path: httpAdapter.getRequestUrl(ctx.getRequest()),
     };
 
-    httpAdapter.reply(ctx.getResponse(), responseBody, values.statusCode);
+    httpAdapter.reply(ctx.getResponse(), responseBody, responseObj.statusCode);
   }
 }
