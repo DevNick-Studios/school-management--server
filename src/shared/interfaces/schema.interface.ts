@@ -85,7 +85,7 @@ export interface IStudent extends Base {
 }
 
 export interface IScore extends Base {
-  student: string | Types.ObjectId;
+  classStudent: string | Types.ObjectId;
   classSubject: string | Types.ObjectId;
   academicYear: string | Types.ObjectId;
   term: string;

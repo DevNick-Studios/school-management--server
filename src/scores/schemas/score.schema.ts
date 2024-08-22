@@ -7,8 +7,8 @@ export type ScoreDocument = HydratedDocument<Score>;
 
 @Schema({ timestamps: true })
 export class Score implements IScore {
-  @Prop({ required: true, type: Types.ObjectId, ref: 'Student' })
-  student: Types.ObjectId;
+  @Prop({ required: true, type: Types.ObjectId, ref: 'ClassStudent' })
+  classStudent: Types.ObjectId;
 
   @Prop({ required: true, type: Types.ObjectId, ref: 'ClassSubject' })
   classSubject: Types.ObjectId;
