@@ -1,26 +1,50 @@
 import { Injectable } from '@nestjs/common';
-import { CreateScoreDto } from './dto/create-score.dto';
-import { UpdateScoreDto } from './dto/update-score.dto';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { Score } from './schemas/score.schema';
 
 @Injectable()
-export class ScoresService {
-  create(createScoreDto: CreateScoreDto) {
-    return 'This action adds a new score';
+export class ScoreService {
+  constructor(
+    @InjectModel(Score.name) private readonly scoreModel: Model<Score>,
+  ) {}
+
+  async createScore(createScoreDto: any): Promise<Score> {
+    const newScore = new this.scoreModel(createScoreDto);
+    return newScore.save();
   }
 
-  findAll() {
-    return `This action returns all scores`;
+  async getScoreById(id: string): Promise<Score> {
+    return this.scoreModel.findById(id).exec();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} score`;
+  async getScoresForStudent({
+    studentId,
+    academicYearId,
+    term,
+  }: {
+    studentId: string;
+    academicYearId: string;
+    term: string;
+  }): Promise<any> {
+    const scores = await this.scoreModel
+      .find({ student: studentId, academicYear: academicYearId, term })
+      .exec();
+
+    const termAverage = this.calculateTermAverage(scores);
+
+    return {
+      scores,
+      termAverage,
+    };
   }
 
-  update(id: number, updateScoreDto: UpdateScoreDto) {
-    return `This action updates a #${id} score`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} score`;
+  private calculateTermAverage(scores: Score[]): number {
+    const totalScore = scores.reduce(
+      (sum, score) => sum + score.total,
+      // (sum, score) => sum + (score.CA + score.exam),
+      0,
+    );
+    return scores.length ? totalScore / scores.length : 0;
   }
 }
