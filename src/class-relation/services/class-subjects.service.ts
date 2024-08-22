@@ -18,6 +18,13 @@ export class ClassSubjectsService {
     return assignment.save();
   }
 
+  async findClassSubject(id: string) {
+    return await this.classSubjectsModel
+      .findById(id)
+      .populate('subject teacher class')
+      .exec();
+  }
+
   async findAllForClass(classId: string) {
     return await this.classSubjectsModel.paginate(
       {
@@ -27,7 +34,7 @@ export class ClassSubjectsService {
     );
   }
 
-  async findAllForTeacher({ teacherId }: { teacherId: string }) {
+  async findAllTeacherSubjects({ teacherId }: { teacherId: string }) {
     // const val = toObjectId(teacherId);
     // console.log({ val, teacherId });
     return await this.classSubjectsModel.paginate(
