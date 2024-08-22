@@ -24,6 +24,12 @@ export enum GenderEnum {
   FEMALE = 'FEMALE',
 }
 
+export enum TermEnum {
+  FIRST = 'FIRST',
+  SECOND = 'SECOND',
+  THIRD = 'THIRD',
+}
+
 export interface IAuthPayload {
   id: string | Types.ObjectId;
   role: string;
@@ -76,6 +82,17 @@ export interface IStudent extends Base {
   // previousClasses?: Types.ObjectId[];
   email?: string;
   password?: string;
+}
+
+export interface IScore extends Base {
+  student: string | Types.ObjectId;
+  classSubject: string | Types.ObjectId;
+  academicYear: string | Types.ObjectId;
+  term: string;
+  CA: number;
+  exam: number;
+  total: number;
+  remarks?: string;
 }
 
 export interface IAcademicYear extends Base {
