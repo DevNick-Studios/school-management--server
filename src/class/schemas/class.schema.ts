@@ -19,6 +19,9 @@ export class Class implements IClass {
 
   @Prop({ required: true, type: Types.ObjectId, ref: 'School' })
   school: string | Types.ObjectId;
+
+  @Prop({ type: Types.ObjectId, ref: 'Teacher' })
+  formTeacher: Types.ObjectId;
 }
 
 export const ClassSchema = SchemaFactory.createForClass(Class);

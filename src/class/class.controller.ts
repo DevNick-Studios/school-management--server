@@ -25,6 +25,19 @@ export class ClassController {
     return this.classService.create({ createClassDto, user });
   }
 
+  @Get('teachers')
+  findTeacherClasses(@CurrentUser() user: IAuthPayload) {
+    return this.classService.findTeacherClasses({ user });
+  }
+
+  @Patch(':id/assign/:formTeacher')
+  assignFormTeacher(
+    @Param('id') id: string,
+    @Param('formTeacher') formTeacher: string,
+  ) {
+    return this.classService.assignFormTeacher({ formTeacher, id });
+  }
+
   @Get()
   findAllPaginate(@CurrentUser() user: IAuthPayload) {
     return this.classService.findAllPaginate({ user });
@@ -32,11 +45,6 @@ export class ClassController {
 
   @Get('all')
   findAll(@CurrentUser() user: IAuthPayload) {
-    return this.classService.findAll({ user });
-  }
-
-  @Get('teacher')
-  findTeacherClasses(@CurrentUser() user: IAuthPayload) {
     return this.classService.findAll({ user });
   }
 

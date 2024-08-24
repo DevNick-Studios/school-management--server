@@ -1,4 +1,4 @@
-import { IsEnum, IsNumber, IsString, Min } from 'class-validator';
+import { IsEnum, IsNumber, IsOptional, IsString, Min } from 'class-validator';
 import {
   EducationalStage,
   IClass,
@@ -7,6 +7,10 @@ import {
 export class CreateClassDto implements Omit<IClass, 'school'> {
   @IsString()
   title: string;
+
+  @IsOptional()
+  @IsString()
+  formTeacher: string;
 
   @IsEnum(EducationalStage)
   stage: EducationalStage; // Use the enum

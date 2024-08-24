@@ -25,16 +25,45 @@ export class ClassService {
     });
   }
 
+  async assignFormTeacher({
+    id,
+    formTeacher,
+  }: {
+    id: string;
+    formTeacher: string;
+  }) {
+    return await this.ClassModel.findByIdAndUpdate(id, { formTeacher });
+  }
+
+  async findAllPaginate({ user }: { user: IAuthPayload }) {
+    return await this.ClassModel.paginate(
+      { school: user.school },
+      {
+        populate: {
+          path: 'formTeacher',
+          select: 'name',
+        },
+      },
+    );
+  }
+
   async findAll({ user }: { user: IAuthPayload }) {
     return await this.ClassModel.find({ school: user.school });
   }
 
   async findTeacherClasses({ user }: { user: IAuthPayload }) {
-    return await this.ClassModel.find({ school: user.school });
-  }
-
-  async findAllPaginate({ user }: { user: IAuthPayload }) {
-    return await this.ClassModel.paginate({ school: user.school });
+    return await this.ClassModel.paginate(
+      {
+        school: user.school,
+        formTeacher: user.accountId,
+      },
+      {
+        populate: {
+          path: 'formTeacher',
+          select: 'name',
+        },
+      },
+    );
   }
 
   async findSchoolClasses(schoolId: string) {
