@@ -30,6 +30,17 @@ export class ClassStudentsController {
     return this.classStudentService.findAllForClass(classId, academicYear);
   }
 
+  @Get(':classId/academic-year/:academicYear/scores')
+  async getAllStudentScores(
+    @Param('classId') classId: string,
+    @Param('academicYear') academicYear: string,
+  ) {
+    return this.classStudentService.getAllStudentScores({
+      classId,
+      academicYear,
+    });
+  }
+
   @Delete(':classId/students/:studentId/academic-year/:academicYear')
   async removeStudentFromClass(
     @Param('classId') classId: string,

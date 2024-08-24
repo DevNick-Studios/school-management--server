@@ -42,6 +42,37 @@ export class ClassStudentService {
     return assignment.save();
   }
 
+  async getAllStudentScores({
+    classId,
+    academicYear,
+  }: {
+    classId: string;
+    academicYear: string;
+  }) {
+    const pipeline = [
+      {
+        $match: {
+          class: classId,
+          academicYear,
+        },
+      },
+      {
+        $addFields: {
+          stringId: { $toString: '$_id' },
+        },
+      },
+      {
+        $lookup: {
+          from: 'scores',
+          localField: 'stringId',
+          foreignField: 'classStudent',
+          as: 'scores',
+        },
+      },
+    ];
+    return await this.classStudentModel.aggregate(pipeline);
+  }
+
   async findAllForClass(classId: string, academicYear: string) {
     return this.classStudentModel.paginate(
       { class: classId, academicYear },
