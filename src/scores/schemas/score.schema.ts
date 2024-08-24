@@ -26,7 +26,7 @@ export class Score implements IScore {
   exam: number;
 
   @Prop({ type: String }) // Optional field for remarks
-  remarks?: string;
+  remark?: string;
 
   // @Prop({ required: true, min: 0, max: 100 })
   // total: number;

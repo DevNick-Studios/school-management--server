@@ -92,7 +92,7 @@ export interface IScore extends Base {
   CA: number;
   exam: number;
   total: number;
-  remarks?: string;
+  remark?: string;
 }
 
 export interface IAcademicYear extends Base {

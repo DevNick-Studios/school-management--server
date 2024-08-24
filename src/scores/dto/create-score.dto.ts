@@ -16,7 +16,7 @@ export class CreateScoreDto implements IScore {
 
   @IsString()
   @IsOptional()
-  remarks: string;
+  remark: string;
 
   @IsNumber()
   exam: number;
