@@ -1,6 +1,6 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Post, Body, Get, Param, Query } from '@nestjs/common';
 import { ScoreService } from './scores.service';
-import { CreateScoreDto } from './dto/create-score.dto';
+import { CreateScoreDto, GetScoresQuery } from './dto/create-score.dto';
 
 @Controller('scores')
 export class ScoresController {
@@ -9,5 +9,29 @@ export class ScoresController {
   @Post()
   create(@Body() createScoreDto: CreateScoreDto) {
     return this.scoreService.createScore({ createScoreDto });
+  }
+
+  @Get('/students/:classStudent')
+  getAllStudentScores(
+    @Param('classStudent') classStudent: string,
+    @Query() query: GetScoresQuery,
+  ) {
+    return this.scoreService.getAllStudentScores({
+      classStudent,
+      term: query.term,
+      academicYear: query.academicYear,
+    });
+  }
+
+  @Get('/subjects/:classSubject')
+  getAllSubjectScores(
+    @Param('classSubject') classSubject: string,
+    @Query() query: GetScoresQuery,
+  ) {
+    return this.scoreService.getAllSubjectScores({
+      classSubject,
+      term: query.term,
+      academicYear: query.academicYear,
+    });
   }
 }

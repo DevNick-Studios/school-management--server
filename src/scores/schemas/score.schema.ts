@@ -75,6 +75,12 @@ ScoreSchema.index({
   academicYear: 1,
   term: 1,
 });
+
+ScoreSchema.index({
+  classStudent: 1,
+  academicYear: 1,
+  term: 1,
+});
 ScoreSchema.index(
   {
     classStudent: 1,

@@ -19,18 +19,28 @@ export class ScoreService {
     return newScore.save();
   }
 
-  async getScoreBySubject({
+  async getAllSubjectScores({
     classSubject,
     academicYear,
     term,
   }: {
+    term: string;
     classSubject: string;
     academicYear: string;
+  }): Promise<Score[]> {
+    return this.scoreModel.find({ classSubject, academicYear, term });
+  }
+
+  async getAllStudentScores({
+    classStudent,
+    academicYear,
+    term,
+  }: {
     term: string;
-  }): Promise<Score> {
-    return this.scoreModel
-      .findById({ classSubject, academicYear, term })
-      .exec();
+    classStudent: string;
+    academicYear: string;
+  }): Promise<Score[]> {
+    return this.scoreModel.find({ classStudent, academicYear, term });
   }
 
   async getScoreById(id: string): Promise<Score> {

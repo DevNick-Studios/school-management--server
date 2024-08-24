@@ -29,8 +29,9 @@ export class CreateScoreDto implements IScore {
   @Min(0)
   @Max(100)
   total: number;
+}
 
-  // student: string;
-  // classSubject: string;
-  // academicYear: string;
+export interface GetScoresQuery {
+  term: string;
+  academicYear: string;
 }
