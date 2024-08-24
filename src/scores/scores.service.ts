@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Score } from './schemas/score.schema';
+import { CreateScoreDto } from './dto/create-score.dto';
 
 @Injectable()
 export class ScoreService {
@@ -9,9 +10,27 @@ export class ScoreService {
     @InjectModel(Score.name) private readonly scoreModel: Model<Score>,
   ) {}
 
-  async createScore(createScoreDto: any): Promise<Score> {
+  async createScore({
+    createScoreDto,
+  }: {
+    createScoreDto: CreateScoreDto;
+  }): Promise<Score> {
     const newScore = new this.scoreModel(createScoreDto);
     return newScore.save();
+  }
+
+  async getScoreBySubject({
+    classSubject,
+    academicYear,
+    term,
+  }: {
+    classSubject: string;
+    academicYear: string;
+    term: string;
+  }): Promise<Score> {
+    return this.scoreModel
+      .findById({ classSubject, academicYear, term })
+      .exec();
   }
 
   async getScoreById(id: string): Promise<Score> {
@@ -19,16 +38,20 @@ export class ScoreService {
   }
 
   async getScoresForStudent({
-    studentId,
+    classStudentId,
     academicYearId,
     term,
   }: {
-    studentId: string;
+    classStudentId: string;
     academicYearId: string;
     term: string;
   }): Promise<any> {
     const scores = await this.scoreModel
-      .find({ student: studentId, academicYear: academicYearId, term })
+      .find({
+        classStudent: classStudentId,
+        academicYear: academicYearId,
+        term,
+      })
       .exec();
 
     const termAverage = this.calculateTermAverage(scores);

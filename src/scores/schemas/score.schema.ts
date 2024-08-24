@@ -77,7 +77,7 @@ ScoreSchema.index({
 });
 ScoreSchema.index(
   {
-    student: 1,
+    classStudent: 1,
     classSubject: 1,
     academicYear: 1,
     term: 1,

@@ -1,9 +1,16 @@
 import { IsNumber, IsOptional, IsString, Max, Min } from 'class-validator';
 import { IScore } from 'src/shared/interfaces/schema.interface';
 
-export class CreateScoreDto
-  implements Omit<IScore, 'classStudent' | 'classSubject' | 'academicYear'>
-{
+export class CreateScoreDto implements IScore {
+  @IsString()
+  classStudent: string;
+
+  @IsString()
+  classSubject: string;
+
+  @IsString()
+  academicYear: string;
+
   @IsString()
   term: string;
 

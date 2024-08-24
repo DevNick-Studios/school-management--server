@@ -8,6 +8,6 @@ export class ScoresController {
 
   @Post()
   create(@Body() createScoreDto: CreateScoreDto) {
-    return this.scoreService.createScore(createScoreDto);
+    return this.scoreService.createScore({ createScoreDto });
   }
 }
