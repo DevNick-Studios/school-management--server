@@ -1,6 +1,14 @@
-import { Controller, Post, Body, Get, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Get,
+  Param,
+  Delete,
+  Query,
+} from '@nestjs/common';
 import { ClassStudentService } from '../services/class-students.service';
-import { CreateClassStudentDto } from '../dto/creates.dto';
+import { CreateClassStudentDto, GetScoresQuery } from '../dto/creates.dto';
 import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
 import { IAuthPayload } from 'src/shared/interfaces/schema.interface';
 import { CreateStudentDto } from 'src/students/dto/create-student.dto';
@@ -30,14 +38,15 @@ export class ClassStudentsController {
     return this.classStudentService.findAllForClass(classId, academicYear);
   }
 
-  @Get(':classId/academic-year/:academicYear/scores')
+  @Get(':classId/scores')
   async getAllStudentScores(
     @Param('classId') classId: string,
-    @Param('academicYear') academicYear: string,
+    @Query() query: GetScoresQuery,
   ) {
     return this.classStudentService.getAllStudentScores({
       classId,
-      academicYear,
+      academicYear: query.academicYear,
+      term: query.term,
     });
   }
 

@@ -45,9 +45,11 @@ export class ClassStudentService {
   async getAllStudentScores({
     classId,
     academicYear,
+    term,
   }: {
     classId: string;
     academicYear: string;
+    term: string;
   }) {
     const pipeline = [
       {
@@ -66,7 +68,39 @@ export class ClassStudentService {
           from: 'scores',
           localField: 'stringId',
           foreignField: 'classStudent',
+          pipeline: [
+            { $match: { term } },
+            {
+              $project: {
+                classSubject: 1,
+                CA: 1,
+                exam: 1,
+              },
+            },
+          ],
           as: 'scores',
+        },
+      },
+      {
+        $lookup: {
+          from: 'students',
+          localField: 'student',
+          foreignField: '_id',
+          pipeline: [
+            {
+              $project: {
+                name: 1,
+              },
+            },
+          ],
+          as: 'student',
+        },
+      },
+      {
+        $addFields: {
+          student: {
+            $first: '$student',
+          },
         },
       },
     ];

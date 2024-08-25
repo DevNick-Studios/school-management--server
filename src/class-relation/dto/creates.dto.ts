@@ -14,3 +14,8 @@ export class CreateClassTeacherDto {
   readonly class: string;
   readonly teacher: string;
 }
+
+export interface GetScoresQuery {
+  term: string;
+  academicYear: string;
+}
