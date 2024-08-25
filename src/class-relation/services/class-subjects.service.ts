@@ -25,13 +25,24 @@ export class ClassSubjectsService {
       .exec();
   }
 
-  async findAllForClass(classId: string) {
+  async findAllClassSubjectPaginated(classId: string) {
     return await this.classSubjectsModel.paginate(
       {
         class: classId,
       },
       { populate: 'subject teacher' },
     );
+  }
+
+  async findAllClassSubject(classId: string) {
+    return await this.classSubjectsModel
+      .find({
+        class: classId,
+      })
+      .populate([
+        { path: 'subject', select: 'title' },
+        { path: 'teacher', select: 'name' },
+      ]);
   }
 
   async findAllTeacherSubjects({ teacherId }: { teacherId: string }) {

@@ -17,8 +17,13 @@ export class ClassSubjectsController {
   }
 
   @Get(':classId/subjects')
-  async findAllForClass(@Param('classId') classId: string) {
-    return this.classSubjectsService.findAllForClass(classId);
+  async findAllClassSubjectPaginated(@Param('classId') classId: string) {
+    return this.classSubjectsService.findAllClassSubjectPaginated(classId);
+  }
+
+  @Get(':classId/subjects/all')
+  async findAllClassSubject(@Param('classId') classId: string) {
+    return this.classSubjectsService.findAllClassSubject(classId);
   }
 
   @Get('teachers/:teacherId/subjects')
