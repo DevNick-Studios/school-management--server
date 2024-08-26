@@ -71,10 +71,18 @@ export class ClassStudentService {
           pipeline: [
             { $match: { term } },
             {
+              $addFields: {
+                total: {
+                  $add: ['$CA', '$exam'],
+                },
+              },
+            },
+            {
               $project: {
                 classSubject: 1,
                 CA: 1,
                 exam: 1,
+                total: 1,
               },
             },
           ],
