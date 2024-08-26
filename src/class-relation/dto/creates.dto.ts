@@ -18,4 +18,6 @@ export class CreateClassTeacherDto {
 export interface GetScoresQuery {
   term: string;
   academicYear: string;
+  page: number;
+  limit?: number;
 }

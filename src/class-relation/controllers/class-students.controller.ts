@@ -47,6 +47,8 @@ export class ClassStudentsController {
       classId,
       academicYear: query.academicYear,
       term: query.term,
+      page: query.page | 1,
+      limit: query.limit || 10,
     });
   }
 
