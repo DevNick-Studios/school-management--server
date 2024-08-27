@@ -34,7 +34,7 @@ export class ScoreService {
         populate: [
           {
             path: 'academicYear',
-            select: 'startYear endYear',
+            select: 'year',
           },
           {
             path: 'classStudent',
