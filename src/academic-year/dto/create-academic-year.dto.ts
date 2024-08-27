@@ -1,12 +1,19 @@
-import { IsNumber } from 'class-validator';
-import { IAcademicYear } from 'src/shared/interfaces/schema.interface';
+import { IsString, IsEnum, IsOptional } from 'class-validator';
+import {
+  IAcademicYear,
+  TermEnum,
+} from 'src/shared/interfaces/schema.interface';
 
-export class CreateAcademicYearDto
-  implements Omit<IAcademicYear, 'school' | 'isActive'>
-{
-  @IsNumber()
-  startYear: number;
+export class CreateAcademicYearDto implements Omit<IAcademicYear, 'isActive'> {
+  @IsString()
+  @IsOptional()
+  school: string;
 
-  @IsNumber()
-  endYear: number;
+  @IsString()
+  year: string;
+
+  @IsOptional()
+  @IsString()
+  @IsEnum(TermEnum)
+  activeTerm: TermEnum;
 }

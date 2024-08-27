@@ -1,19 +1,26 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, Types } from 'mongoose';
 import * as mongoosePaginate from 'mongoose-paginate-v2';
-import { IAcademicYear } from 'src/shared/interfaces/schema.interface';
+import {
+  IAcademicYear,
+  TermEnum,
+} from 'src/shared/interfaces/schema.interface';
 
 export type AcademicYearDocument = HydratedDocument<AcademicYear>;
 
 @Schema({ timestamps: true })
 export class AcademicYear implements IAcademicYear {
   @Prop({ required: true })
-  startYear: number;
+  year: string;
 
-  @Prop({ required: true })
-  endYear: number;
+  @Prop({
+    required: true,
+    enum: Object.values(TermEnum),
+    default: TermEnum.FIRST,
+  })
+  activeTerm: TermEnum; // New field for the active term
 
-  @Prop({ default: false })
+  @Prop({ default: true })
   isActive: boolean;
 
   @Prop({ required: true, type: Types.ObjectId, ref: 'School' })
@@ -26,4 +33,4 @@ AcademicYearSchema.plugin(mongoosePaginate);
 
 AcademicYearSchema.index({ school: 1 });
 AcademicYearSchema.index({ school: 1, isActive: 1 });
-AcademicYearSchema.index({ school: 1, startYear: 1 }, { unique: true });
+AcademicYearSchema.index({ school: 1, year: 1 }, { unique: true });

@@ -12,6 +12,13 @@ export class AcademicYearService {
     private academicYearModel: PaginateModel<AcademicYear>,
   ) {}
 
+  async create(
+    createAcademicYearDto: CreateAcademicYearDto,
+  ): Promise<AcademicYear> {
+    const newYear = new this.academicYearModel(createAcademicYearDto);
+    return newYear.save();
+  }
+
   async createAcademicYear({
     createAcademicYearDto,
     user,
