@@ -98,8 +98,8 @@ export interface IScore extends Base {
 
 export interface IAcademicYear extends Base {
   school: string | Types.ObjectId;
-  startYear: number;
-  endYear: number;
+  year: string;
+  activeTerm: TermEnum; // New field for the active term
   isActive: boolean;
 }
 

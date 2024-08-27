@@ -9,6 +9,7 @@ import {
   IAuthPayload,
   ISchool,
   ITeacher,
+  TermEnum,
 } from 'src/shared/interfaces/schema.interface';
 import { AcademicYearService } from 'src/academic-year/academic-year.service';
 
@@ -42,10 +43,11 @@ export class AuthService {
       owner: newUser._id,
     });
 
-    //   const academicYear =
-    // await this.academicYearService.getActiveAcademicYearBySchoolId({
-    //   school: payload.school,
-    // });
+    await this.academicYearService.create({
+      activeTerm: createAccountDto.term as TermEnum,
+      year: createAccountDto.session,
+      school: school._id.toString(),
+    });
 
     newUser.account = school._id;
     await newUser.save();

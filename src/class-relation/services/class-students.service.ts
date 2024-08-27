@@ -205,12 +205,12 @@ export class ClassStudentService {
           termAverage: 1,
         },
       },
-      // Sort students by termTotal in descending order - can be taken off for performance gains
-      // {
-      //   $sort: {
-      //     termTotal: -1, // Sort from highest to lowest
-      //   },
-      // },
+      // Sort students by termTotal in descending order
+      {
+        $sort: {
+          termTotal: -1, // Sort from highest to lowest
+        },
+      },
       // Add position field
       {
         $group: {
@@ -234,6 +234,7 @@ export class ClassStudentService {
           newRoot: '$students',
         },
       },
+      // for pagination - can be taken off for performance gains
       {
         $facet: {
           metadata: [

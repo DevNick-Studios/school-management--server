@@ -15,6 +15,12 @@ export class CreateSchoolDto implements ISchool {
   location: string;
 
   @IsString()
+  session: string;
+
+  @IsString()
+  term: string;
+
+  @IsString()
   @IsOptional()
   owner: string | Types.ObjectId;
 }
