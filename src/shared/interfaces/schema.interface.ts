@@ -37,6 +37,7 @@ export interface IAuthPayload {
   accountId: string;
   school: string;
   academicYear: string;
+  term: string;
 }
 
 export interface IAuthRequest extends Request {

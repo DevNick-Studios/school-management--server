@@ -75,6 +75,7 @@ export class AuthService {
       school: '',
       accountId: '',
       academicYear: '',
+      term: '',
     };
 
     if (foundUser.role === 'Teacher') {
@@ -91,6 +92,7 @@ export class AuthService {
       });
 
     payload.academicYear = academicYear._id?.toString();
+    payload.term = academicYear.activeTerm;
 
     const expires = new Date();
     expires.setSeconds(expires.getSeconds() + 360000);
@@ -108,6 +110,7 @@ export class AuthService {
       ...payload,
       school: payload.school,
       academicYear: payload.academicYear,
+      term: payload.term,
       accessToken: token,
     };
   }
