@@ -3,7 +3,7 @@ import { PaginateModel } from 'mongoose';
 import { Injectable } from '@nestjs/common';
 import { CreateStudentDto } from './dto/create-student.dto';
 import { UpdateStudentDto } from './dto/update-student.dto';
-import { Student } from './schemas/Student.schema';
+import { Student } from './schemas/student.schema';
 import { IAuthPayload } from 'src/shared/interfaces/schema.interface';
 
 @Injectable()

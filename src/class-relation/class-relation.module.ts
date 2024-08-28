@@ -14,7 +14,7 @@ import { ClassStudentService } from './services/class-students.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ClassSubjectsController } from './controllers/class-subjects.controller';
 import { ClassStudentsController } from './controllers/class-students.controller';
-import { Class, ClassSchema } from 'src/class/schemas/Class.schema';
+import { Class, ClassSchema } from 'src/class/schemas/class.schema';
 import { Subject, SubjectSchema } from 'src/subjects/schemas/subjects.schema';
 import { StudentsModule } from 'src/students/students.module';
 
