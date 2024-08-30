@@ -1,6 +1,6 @@
 import { InjectModel } from '@nestjs/mongoose';
 import { PaginateModel } from 'mongoose';
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateClassDto } from './dto/create-class.dto';
 import { UpdateClassDto } from './dto/update-class.dto';
 import { Class } from './schemas/class.schema';
@@ -19,10 +19,56 @@ export class ClassService {
     createClassDto: CreateClassDto;
     user: IAuthPayload;
   }) {
-    return await this.ClassModel.create({
-      ...createClassDto,
+    if (!user.school)
+      throw new BadRequestException('School Id must be provided');
+    const classObj = await this.ClassModel.findOne({
       school: user.school,
+    }).sort('-grade');
+    if (!classObj) {
+      return await this.ClassModel.create({
+        ...createClassDto,
+        grade: 1,
+        school: user.school,
+      });
+    } else {
+      return await this.ClassModel.create({
+        ...createClassDto,
+        grade: ++classObj.grade,
+        school: user.school,
+      });
+    }
+  }
+
+  async switchGradeLevel({
+    user,
+    id,
+    updateClassDto,
+  }: {
+    id: string;
+    updateClassDto: Partial<CreateClassDto>;
+    user: IAuthPayload;
+  }) {
+    const classObj2 = await this.ClassModel.findOne({
+      school: user.school,
+      grade: updateClassDto.grade,
     });
+
+    if (!classObj2) {
+      return await this.ClassModel.findByIdAndUpdate(id, updateClassDto, {
+        new: true,
+      });
+    }
+
+    const classObj = await this.ClassModel.findById(id);
+    const temp = classObj2.grade;
+
+    classObj2.grade = classObj.grade;
+    classObj.grade = temp;
+
+    await classObj.save();
+    await classObj2.save();
+
+    return classObj;
   }
 
   async assignFormTeacher({
@@ -75,7 +121,7 @@ export class ClassService {
   }
 
   async findOne(data: Partial<IClass>) {
-    return await this.ClassModel.findById(data);
+    return await this.ClassModel.findOne(data);
   }
 
   // For Super Super Admin

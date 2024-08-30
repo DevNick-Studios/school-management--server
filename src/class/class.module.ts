@@ -10,5 +10,6 @@ import { ClassService } from './class.service';
   ],
   controllers: [ClassController],
   providers: [ClassService],
+  exports: [ClassService],
 })
 export class ClassModule {}
