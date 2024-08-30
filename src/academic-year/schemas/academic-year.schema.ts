@@ -20,6 +20,9 @@ export class AcademicYear implements IAcademicYear {
   })
   activeTerm: TermEnum; // New field for the active term
 
+  @Prop({ required: true })
+  count: number;
+
   @Prop({ default: true })
   isActive: boolean;
 
@@ -33,4 +36,5 @@ AcademicYearSchema.plugin(mongoosePaginate);
 
 AcademicYearSchema.index({ school: 1 });
 AcademicYearSchema.index({ school: 1, isActive: 1 });
+AcademicYearSchema.index({ school: 1, count: 1 });
 AcademicYearSchema.index({ school: 1, year: 1 }, { unique: true });

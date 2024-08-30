@@ -2,7 +2,10 @@ import { Injectable, BadRequestException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { PaginateModel } from 'mongoose';
 import { AcademicYear } from './schemas/academic-year.schema';
-import { IAuthPayload } from 'src/shared/interfaces/schema.interface';
+import {
+  IAcademicYear,
+  IAuthPayload,
+} from 'src/shared/interfaces/schema.interface';
 import { CreateAcademicYearDto } from './dto/create-academic-year.dto';
 
 @Injectable()
@@ -15,8 +18,19 @@ export class AcademicYearService {
   async create(
     createAcademicYearDto: CreateAcademicYearDto,
   ): Promise<AcademicYear> {
-    const newYear = new this.academicYearModel(createAcademicYearDto);
+    const newYear = new this.academicYearModel({
+      ...createAcademicYearDto,
+      count: 1,
+    });
     return newYear.save();
+  }
+
+  async findById(id: string) {
+    return await this.academicYearModel.findById(id);
+  }
+
+  async findOne(data: Partial<IAcademicYear>) {
+    return await this.academicYearModel.findOne(data);
   }
 
   async createAcademicYear({
@@ -36,11 +50,23 @@ export class AcademicYearService {
       throw new BadRequestException('Academic year already exists');
     }
 
-    const newYear = new this.academicYearModel({
-      ...payload,
-      isActive: false,
-    });
-    return newYear.save();
+    const session = await this.academicYearModel
+      .findOne({ school: user.school })
+      .sort('-count');
+
+    if (!session) {
+      return await this.academicYearModel.create({
+        ...createAcademicYearDto,
+        count: 1,
+        school: user.school,
+      });
+    } else {
+      return await this.academicYearModel.create({
+        ...createAcademicYearDto,
+        count: ++session.count,
+        school: user.school,
+      });
+    }
   }
 
   async getAcademicYears({ user }: { user: IAuthPayload }) {

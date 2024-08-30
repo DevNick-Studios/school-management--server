@@ -63,8 +63,7 @@ export interface IClass extends Base {
   school: string | Types.ObjectId;
   formTeacher: string | Types.ObjectId;
   title: string;
-  stage: EducationalStage;
-  level: number;
+  grade: number;
 }
 
 export interface ITeacher extends Base {
@@ -101,6 +100,7 @@ export interface IAcademicYear extends Base {
   school: string | Types.ObjectId;
   year: string;
   activeTerm: TermEnum; // New field for the active term
+  count?: number;
   isActive: boolean;
 }
 
