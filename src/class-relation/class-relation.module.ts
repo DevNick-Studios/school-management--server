@@ -17,6 +17,8 @@ import { ClassStudentsController } from './controllers/class-students.controller
 import { Class, ClassSchema } from 'src/class/schemas/class.schema';
 import { Subject, SubjectSchema } from 'src/subjects/schemas/subjects.schema';
 import { StudentsModule } from 'src/students/students.module';
+import { ClassModule } from 'src/class/class.module';
+import { AcademicYearModule } from 'src/academic-year/academic-year.module';
 
 @Module({
   imports: [
@@ -27,6 +29,8 @@ import { StudentsModule } from 'src/students/students.module';
       { name: Subject.name, schema: SubjectSchema },
     ]),
     StudentsModule,
+    ClassModule,
+    AcademicYearModule,
   ],
   controllers: [
     ClassRelationController,

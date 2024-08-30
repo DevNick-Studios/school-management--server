@@ -30,6 +30,14 @@ export class ClassStudentsController {
     return this.classStudentService.assignStudent(createClassStudentDto);
   }
 
+  @Post('students/:id/promote')
+  async promoteStudent(
+    @Param('id') id: string,
+    @CurrentUser() user: IAuthPayload,
+  ) {
+    return this.classStudentService.promoteStudent({ id, user });
+  }
+
   @Get(':classId/students/academic-year/:academicYear')
   async findAllForClass(
     @Param('classId') classId: string,
