@@ -13,10 +13,18 @@ import { SharedModule } from './shared/shared.module';
 import { ScoresModule } from './scores/scores.module';
 import { ClassRelationModule } from './class-relation/class-relation.module';
 import { AcademicYearModule } from './academic-year/academic-year.module';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
-    MongooseModule.forRoot('mongodb://localhost/local'),
+    ConfigModule.forRoot({ isGlobal: true }),
+    // MongooseModule.forRoot('mongodb://localhost/local'),
+    MongooseModule.forRootAsync({
+      useFactory: (configService: ConfigService) => ({
+        uri: configService.get<string>('MONGODB_URI'),
+      }),
+      inject: [ConfigService],
+    }),
     AuthModule,
     UsersModule,
     SchoolsModule,
