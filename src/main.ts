@@ -17,6 +17,6 @@ async function bootstrap() {
     allowedHeaders: 'Content-Type, Authorization',
   });
 
-  await app.listen(3200);
+  await app.listen(process.env.PORT || 3200);
 }
 bootstrap();
