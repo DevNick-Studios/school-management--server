@@ -23,7 +23,7 @@ export class AcademicYear implements IAcademicYear {
   @Prop({ required: true })
   count: number;
 
-  @Prop({ default: true })
+  @Prop({ default: false })
   isActive: boolean;
 
   @Prop({ required: true, type: Types.ObjectId, ref: 'School' })
