@@ -2,7 +2,10 @@ import { Controller, Get, Post, Body, Param, Patch } from '@nestjs/common';
 import { AcademicYearService } from './academic-year.service';
 import { IAuthPayload } from 'src/shared/interfaces/schema.interface';
 import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
-import { CreateAcademicYearDto } from './dto/create-academic-year.dto';
+import {
+  ChangeActiveTerm,
+  CreateAcademicYearDto,
+} from './dto/create-academic-year.dto';
 
 @Controller('academic-year')
 export class AcademicYearController {
@@ -44,5 +47,14 @@ export class AcademicYearController {
   @Patch(':id/deactivate')
   async deactivate(@Param('id') id: string) {
     return this.academicYearService.deactivateAcademicYear(id);
+  }
+
+  @Patch(':id/set-term')
+  async setActiveTerm(
+    @Body() term: ChangeActiveTerm,
+    @Param('id') id: string,
+    @CurrentUser() user: IAuthPayload,
+  ) {
+    return this.academicYearService.setActiveTerm({ id, user, term });
   }
 }

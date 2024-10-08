@@ -1,4 +1,8 @@
-import { Injectable, BadRequestException } from '@nestjs/common';
+import {
+  Injectable,
+  BadRequestException,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { PaginateModel } from 'mongoose';
 import { AcademicYear } from './schemas/academic-year.schema';
@@ -6,7 +10,10 @@ import {
   IAcademicYear,
   IAuthPayload,
 } from 'src/shared/interfaces/schema.interface';
-import { CreateAcademicYearDto } from './dto/create-academic-year.dto';
+import {
+  ChangeActiveTerm,
+  CreateAcademicYearDto,
+} from './dto/create-academic-year.dto';
 
 @Injectable()
 export class AcademicYearService {
@@ -88,6 +95,26 @@ export class AcademicYearService {
         isActive: true,
       })
       .exec();
+  }
+
+  async setActiveTerm({
+    user,
+    id,
+    term,
+  }: {
+    user: IAuthPayload;
+    id: string;
+    term: ChangeActiveTerm;
+  }) {
+    const session = await this.academicYearModel.findOne({
+      _id: id,
+      school: user.school,
+    });
+    if (!session) {
+      throw new NotFoundException('session doesnt exist');
+    }
+    session.activeTerm = term.activeTerm;
+    return session.save();
   }
 
   async getActiveAcademicYearBySchoolId({ school }: { school: string }) {
