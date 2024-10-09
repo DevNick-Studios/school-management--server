@@ -4,6 +4,7 @@ import {
   IsOptional,
   Matches,
   IsNotEmpty,
+  IsBoolean,
 } from 'class-validator';
 import {
   IAcademicYear,
@@ -26,6 +27,10 @@ export class CreateAcademicYearDto implements Omit<IAcademicYear, 'isActive'> {
   @IsString()
   @IsEnum(TermEnum)
   activeTerm: TermEnum;
+
+  @IsOptional()
+  @IsBoolean()
+  isActive?: boolean;
 }
 
 export class ChangeActiveTerm {

@@ -47,6 +47,7 @@ export class AuthService {
       activeTerm: createAccountDto.term as TermEnum,
       year: createAccountDto.session,
       school: school._id.toString(),
+      isActive: true,
     });
 
     newUser.account = school._id;
@@ -67,6 +68,7 @@ export class AuthService {
     const { password, ...user } = foundUser;
 
     await this.usersService.comparePassword(password, loginDto.password);
+    console.log({ user })
 
     const payload: IAuthPayload = {
       id: user._id,
@@ -90,6 +92,8 @@ export class AuthService {
       await this.academicYearService.getActiveAcademicYearBySchoolId({
         school: payload.school,
       });
+
+    console.log({ academicYear, payload });
 
     payload.academicYear = academicYear._id?.toString();
     payload.term = academicYear.activeTerm;
