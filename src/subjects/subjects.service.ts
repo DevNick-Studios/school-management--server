@@ -26,7 +26,10 @@ export class SubjectsService {
   }
 
   async findAllPaginate({ user }: { user: IAuthPayload }) {
-    return await this.SubjectModel.paginate({ school: user.school });
+    return await this.SubjectModel.paginate(
+      { school: user.school },
+      { limit: 50 },
+    );
   }
 
   async findAll({ user }: { user: IAuthPayload }) {

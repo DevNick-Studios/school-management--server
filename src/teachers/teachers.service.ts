@@ -58,7 +58,10 @@ export class TeachersService {
   }
 
   async findAllPaginate({ user }: { user: IAuthPayload }) {
-    return await this.TeacherModel.paginate({ school: user.school });
+    return await this.TeacherModel.paginate(
+      { school: user.school },
+      { limit: 50 },
+    );
   }
 
   async findAll({ user }: { user: IAuthPayload }) {

@@ -1,16 +1,15 @@
-import { IsNumber, IsOptional, IsString, Min } from 'class-validator';
+import { IsNumber, IsOptional, IsString } from 'class-validator';
 import { IClass } from 'src/shared/interfaces/schema.interface';
 
-export class CreateClassDto implements Omit<IClass, 'school'> {
+export class CreateClassDto implements Omit<IClass, 'school' | 'grade'> {
   @IsString()
   title: string;
 
-  @IsOptional()
+  // @IsOptional()
   @IsString()
   formTeacher: string;
 
   @IsOptional()
   @IsNumber()
-  @Min(1)
-  grade: number; // Numeric value for the level within the stage
+  grade?: number; // Numeric value for the level within the stage
 }

@@ -89,6 +89,7 @@ export class ClassService {
           path: 'formTeacher',
           select: 'name',
         },
+        limit: 50,
       },
     );
   }
